@@ -5,6 +5,9 @@
     $error_correo = $error_contrasena = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $db = new database();
+        $conn = $db->connect();
+
         $correo = $_POST["correo"];
         $contrasena = $_POST["contrasena"];
 
