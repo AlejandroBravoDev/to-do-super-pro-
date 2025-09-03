@@ -1,34 +1,63 @@
 <?php
-require_once 'conexion.php'; 
+require 'conexion.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullname = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $password = trim($_POST['clave']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $db = new database();
+    $conn = $db->connect();
 
-  
-    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+    $nombre = trim($_POST['nombre']);
+    $correo = trim($_POST['correo']);
+    $clave_hash = password_hash($_POST['clave'], PASSWORD_BCRYPT);
+    $rol = $_POST['rol'] ?? 'usuario';
+    $fecha = date('Y-m-d H:i:s');
 
-    try {
-        $db = new Database();
-        $conn = $db->connect();
+    // Validar correo
+    if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+        die("Correo inválido.");
+    }
 
-        $sql = "INSERT INTO users (fullname, email, password) VALUES (:fullname, :email, :password)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':fullname', $fullname);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $passwordHash);
-
-        if ($stmt->execute()) {
-            header('Location: index.php');
-        } else {
-            echo "Error al registrar el usuario.";
+    // Manejo de avatar
+    $avatarPath = null;
+    if (!empty($_FILES['avatar']['name'])) {
+        $directorio = "avatares/";
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0777, true);
         }
 
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        $nombreArchivo = uniqid() . "_" . basename($_FILES['avatar']['name']);
+        $rutaArchivo = $directorio . $nombreArchivo;
+
+        if (move_uploaded_file($_FILES['avatar']['tmp_name'], $rutaArchivo)) {
+            $avatarPath = $rutaArchivo;
+        }
     }
-} else {
-    echo "Acceso inválido.";
+
+    try {
+        // Verificar si el correo ya está registrado
+        $stmt = $conn->prepare("SELECT id FROM usuarios WHERE correo = :correo");
+        $stmt->bindParam(':correo', $correo);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            die("El correo ya está registrado.");
+        }
+
+        // Insertar usuario
+        $stmt = $conn->prepare("INSERT INTO usuarios (nombre, correo, clave_hash, rol, avatar, creado_en, actualizado_en)
+                                VALUES (:nombre, :correo, :clave_hash, :rol, :avatar, :creado, :actualizado)");
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':clave_hash', $clave_hash);
+        $stmt->bindParam(':rol', $rol);
+        $stmt->bindParam(':avatar', $avatarPath);
+        $stmt->bindParam(':creado', $fecha);
+        $stmt->bindParam(':actualizado', $fecha);
+        $stmt->execute();
+
+        echo "Registro exitoso.";
+        exit;
+    } catch (PDOException $e) {
+        echo "Error al registrar: " . $e->getMessage();
+    }
 }
 ?>
