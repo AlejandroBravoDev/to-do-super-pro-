@@ -3,26 +3,52 @@
     require_once "action-register.php";
 
     $error_correo = $error_contrasena = "";
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $correo = $_POST["correo"];
         $contrasena = $_POST["contrasena"];
-        
-        if(empty($correo)){
+
+        // Validar correo
+        if (empty($correo)) {
             $error_correo = "El correo es obligatorio";
-        }elseif(!filter_var($correo, FILTER_VALIDATE_EMAIL)){
-            $error_correo = "El correo no es valido";
+        } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            $error_correo = "El correo no es válido";
         }
 
-        if(empty($contrasena)){
+        // Validar contraseña
+        if (empty($contrasena)) {
             $error_contrasena = "La contraseña es obligatoria";
-        }elseif(password_verify($contrasena, $passwordhash)){
-            session_start();
-            $_SESSION["id"] = $id;
-            $_SESSION["nombre"] = $nombre;
-            $_SESSION["correo"] = $correo;
-            header("Location: index.php");
-        }else{
-            $error_contrasena = "La contraseña es incorrecta";
         }
+
+        // Solo continuar si no hay errores
+        if (empty($error_correo) && empty($error_contrasena)) {
+            // Buscar usuario en la BD
+            $sql = "SELECT id, nombre, correo, clave_hash FROM usuarios WHERE correo = ?";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bind_param("s", $correo);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+
+            if ($resultado->num_rows == 1) {
+                $usuario = $resultado->fetch_assoc();
+
+                // Verificar contraseña hasheada
+                if (password_verify($contrasena, $usuario["clave_hash"])) {
+                    session_start();
+                    $_SESSION["id"] = $usuario["id"];
+                    $_SESSION["nombre"] = $usuario["nombre"];
+                    $_SESSION["correo"] = $usuario["correo"];
+                    header("Location: index.php");
+                    exit;
+                } else {
+                    $error_contrasena = "La contraseña es incorrecta";
+                }
+            } else {
+                $error_correo = "El correo no está registrado";
+            }
+        }
+
+        header("location: ../frontend/login.html");
+        exit;
     }
 ?>
