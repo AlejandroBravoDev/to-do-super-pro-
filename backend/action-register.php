@@ -2,8 +2,7 @@
 require 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $db = new database();
-    $conn = $db->connect();
+
 
     $nombre = trim($_POST['nombre']);
     $correo = trim($_POST['correo']);
@@ -34,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Verificar si el correo ya está registrado
-        $stmt = $conn->prepare("SELECT id FROM usuarios WHERE correo = :correo");
+        $stmt = $conexion->prepare("SELECT id FROM usuarios WHERE correo = :correo");
         $stmt->bindParam(':correo', $correo);
         $stmt->execute();
 
