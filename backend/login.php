@@ -33,7 +33,7 @@
                     $_SESSION["id"] = $usuario["id"];
                     $_SESSION["nombre"] = $usuario["nombre"];
                     $_SESSION["correo"] = $usuario["correo"];
-
+                    header("location: frontend/interfaz.php");
                 } else {
                     $error_contrasena = "La contraseña es incorrecta";
                 }

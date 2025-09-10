@@ -1,4 +1,5 @@
 <?php
+    session_start();
     $host = "localhost";
     $usuario = "root"; 
     $contrasena = "12345";  
