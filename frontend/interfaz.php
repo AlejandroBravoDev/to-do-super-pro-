@@ -105,5 +105,6 @@
             }
         ?>
     </div>
+    <a href="proyectos.php">Crear nuevo proyecto</a>
 </body>
 </html>

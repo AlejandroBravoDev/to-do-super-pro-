@@ -22,6 +22,8 @@ require_once '../backend/crearProyectos.php';
         <input type="number" name="id_propietario" id="id_propietario" required>
 
         <button type="submit">Guardar Proyecto</button>
+        <a href="visualizarProyectos.php">Ver proyectos</a>
     </form>
+    <a href="interfaz.php">Volver a inicio</a>
 </body>
 </html>

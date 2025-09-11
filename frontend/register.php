@@ -25,6 +25,7 @@
             <input type="file" name="avatar" accept="image/*" />
             
             <button type="submit">Registrar</button>
+            <a href="../index.php">Inicie sesion</a>
         </form>
     </main>
 </body>
