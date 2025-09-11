@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssssss", $nombre, $correo, $clave_hash, $rol, $avatarPath, $fecha, $fecha);
 
     if ($stmt->execute()) {
-        header('Location: ../frontend/login.php');
+        header('Location: index.php');
     } else {
         echo "Error al registrar: " . $stmt->error;
     }

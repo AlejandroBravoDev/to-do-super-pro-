@@ -12,7 +12,7 @@
 </head>
 <body>
     <main class="login">
-        <form  method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             <input type="text" name="nombre" placeholder="Nombre" required />
             <input type="email" name="correo" placeholder="Correo Electrónico" required />
             <input type="password" name="clave" placeholder="Contraseña" required />
