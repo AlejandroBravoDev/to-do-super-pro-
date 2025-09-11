@@ -2,7 +2,7 @@
     session_start();
     $host = "localhost";
     $usuario = "root"; 
-    $contrasena = "12345";  
+    $contrasena = "";
     $bd = "todopro";
 
     $conexion = new mysqli($host, $usuario, $contrasena, $bd);

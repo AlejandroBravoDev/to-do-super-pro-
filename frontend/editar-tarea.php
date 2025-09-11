@@ -65,7 +65,7 @@
         <select name="asignar-proyecto" id="">
             <option value="">asignar proyecto</option>
             <?php
-            $sql = "select * from todopro.proyectos";
+            $sql = "select *     from todopro.proyectos";
             $resultado = mysqli_query($conexion, $sql);
 
             if ($resultado ->num_rows > 0) {
