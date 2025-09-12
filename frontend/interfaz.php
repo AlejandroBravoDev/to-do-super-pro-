@@ -31,7 +31,8 @@
                         echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["id_asignado"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>";
                         echo "<td>
                                 <form method='post' action='../backend/action-eliminar-tarea.php'>
                                     <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
@@ -104,10 +105,25 @@
             ?>
         </select>
         <!--Select para proyectos-->
+        <label for="">etiquetas</label>
+        <select name="asignar-usuario" id="">
+            <option value="">etiquetar</option>
+            <?php
+                $sql = "select * from todopro.etiquetas";
+                $resultado = mysqli_query($conexion, $sql);
+
+                if ($resultado ->num_rows > 0) {
+                    while ($row = $resultado -> fetch_assoc()) {
+                        echo "<option value='" . $row["nombre"] . "'>" . $row["nombre"] . "</option>";
+                    }
+                }
+            ?>
+        </select>
         
         <button type="submit">Agregar</button>
         <div class="links">
             <a href="proyectos.php">Crear nuevo proyecto</a>
+            <a href="etiquetas.php">Crear etiqueta</a>
         </div>
     </form>
     <!-- $sql = select * from tareas where id_creador = $_SESSION["id"]-->

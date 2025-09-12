@@ -11,13 +11,14 @@
             $prioridad = $_POST["prioridad"];
             $usuario_asignado = $_POST["asignar-usuario"];
             $proyecto = $_POST["proyecto"] ?? null;
+            $etiqueta = $_POST["etiqueta"] ?? null;
 
     //        $sql1 = "select nombre from usuario where id_asignado = ?";
     //        $resultado1 = $conexion->prepare($sql1);
 
-            $sql = "INSERT INTO tareas (id_creador, titulo, fecha_vencimiento, estado, prioridad, nombre_asignado) values (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO tareas (id_creador, titulo, fecha_vencimiento, estado, prioridad, nombre_asignado, nombre_etiqueta) values (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conexion->prepare($sql);
-            $stmt -> bind_param("isssss", $id_usuario,$titulo_tarea, $fecha, $estado, $prioridad, $usuario_asignado);
+            $stmt -> bind_param("issssss", $id_usuario,$titulo_tarea, $fecha, $estado, $prioridad, $usuario_asignado, $etiqueta);
             if ($stmt -> execute()){
                 $aviso = "Tarea creada correctamente";
             }else{
