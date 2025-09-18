@@ -34,7 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION["id"] = $usuario["id"];
                     $_SESSION["nombre"] = $usuario["nombre"];
                     $_SESSION["correo"] = $usuario["correo"];
-                    header("Location: location: frontend/interfaz.php");
+                    header("Location: frontend/interfaz.php");
+                    echo "inicio de sesion exitoso.";
                     exit;
                 } else {
                     $error_contrasena = "La contraseña es incorrecta";

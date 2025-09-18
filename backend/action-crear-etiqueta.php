@@ -24,22 +24,3 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 }
 ?>
-
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<form action="" method="post">
-    <input type="hidden" name="id_etiqueta" value="<?=$_POST['id_etiqueta']?>">
-    <input type="text" name="etiqueta">
-    <button type="submit">crear</button>
-
-</form>
-</body>
-</html>

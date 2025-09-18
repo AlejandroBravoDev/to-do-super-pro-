@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nombre) || empty($descripcion) || $id_propietario <= 0) {
         die("Todos los campos son obligatorios.");
     }
-    // Verificar que el propietario exista
+    //Verificar que el propietario exista
     $check = $conexion->prepare("SELECT id FROM usuarios WHERE id = ? LIMIT 1");
     $check->bind_param("i", $id_propietario);
     $check->execute();
