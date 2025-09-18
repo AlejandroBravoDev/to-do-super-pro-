@@ -3,6 +3,8 @@
 
     $mensaje = "";
     if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id_tarea"])){
+
+
         $fecha_actual = date("Y-m-d H:i:s");
         $id_tarea = $_POST["id_tarea"];
         $id_usuario = $_SESSION["id"];
@@ -14,14 +16,24 @@
         $usuario = $_POST["asignar-usuario"];
         $proyecto = !empty($_POST["asignar-proyecto"]) ? $_POST["asignar-proyecto"] : NULL;
 
-        $sql = "UPDATE tareas SET titulo = ?, nombre_asignado = ?, prioridad = ?, estado = ?, id_proyecto = ?, actualizado_en = ? WHERE id = ?";
-
-        $stmt = $conexion->prepare($sql);
-        $stmt -> bind_param("ssssisi", $titulo, $usuario, $prioridad, $estado, $proyecto, $fecha_actual, $id_tarea);
-        if ($stmt -> execute()){
-            header("location: ../frontend/interfaz.php");
-        }else{
-            echo "error";
+        if(empty($titulo) || empty($fecha_vencimiento) || empty($prioridad) || empty($estado)){
+            die("Todos los campos son obligatorios");
         }
+
+        if(empty($mensaje)){
+            $sql = "UPDATE tareas SET titulo = ?, nombre_asignado = ?, prioridad = ?, estado = ?, id_proyecto = ?, actualizado_en = ? WHERE id = ?";
+
+            $stmt = $conexion->prepare($sql);
+            $stmt -> bind_param("ssssisi", $titulo, $usuario, $prioridad, $estado, $proyecto, $fecha_actual, $id_tarea);
+            if ($stmt -> execute()){
+                header("location: ../frontend/interfaz.php");
+                exit();
+            }else{
+                echo "error";
+            }
+        }
+
+        echo $mensaje;
+
     }
 ?>

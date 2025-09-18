@@ -1,16 +1,15 @@
 <?php
+    session_start();
 
-session_start();
+    $host = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $bd = "todopro";
 
-$host = "localhost";
-$usuario = "root"; 
-$contrasena = "";  
-$bd = "todopro";
+    $conexion = new mysqli($host, $usuario, $contrasena, $bd);
 
-$conexion = new mysqli($host, $usuario, $contrasena, $bd);
+    if ($conexion->connect_error) {
+        die("Error de conexión: " . $conexion->connect_error);
+    }
 
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
-}
-    
 ?>
