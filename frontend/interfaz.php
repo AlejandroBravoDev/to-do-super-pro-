@@ -1,5 +1,6 @@
 <?php
-    require_once "../backend/action-crear-tarea.php";
+    require_once "../backend/conexion.php";
+    require_once "../backend/adjuntos.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../frontend/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -195,8 +196,10 @@
                         echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["nombre_proyecto"]) . "</td>";
                         echo "<td>
                                 <form method='post' action='../backend/action-eliminar-tarea.php'>
                                     <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
@@ -209,6 +212,14 @@
                                     <button type='submit' style='width: 100px;'>Editar</button>
                                 </form>
                              </td>";
+                        echo "<td>
+                                <form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data'>
+                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
+                                    <label>subir archivo adjunto</label>
+                                    <input type='file' name='archivo' id='archivo'>
+                                    <button type='submit'>subir</button>
+                                </form>
+                              </td>";
                         echo "<tr>";
                         //Form para comentar
                         echo "<tr><td colspan='7'>";
@@ -251,9 +262,8 @@
             }
         ?>
     </div>
-    <?=$aviso?>
     
-    <form method="post" class="crearTareas">
+    <form method="post" class="crearTareas" action="../backend/action-crear-tarea.php">
         <h2>Crea tu tarea</h2>
         <label for="">Nombre</label>
         <input type="text" name="titulo" placeholder="tarea">
@@ -272,6 +282,7 @@
             <option value="completada">completada</option>
             <option value="enProceso">en proceso</option>
         </select>
+
         <label for="">asignar</label>
         <select name="asignar-usuario" id="">
             <option value="">asignar usuario</option>
@@ -281,7 +292,7 @@
 
                 if ($resultado ->num_rows > 0) {
                     while ($row = $resultado -> fetch_assoc()) {
-                        echo "<option value='" . $row["nombre"] . "'>" . $row["nombre"] . "</option>";
+                        echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
                     }
                 }
             ?>
@@ -302,7 +313,7 @@
             ?>
         </select>
         <label for="">etiquetas</label>
-        <select name="asignar-usuario" id="">
+        <select name="etiqueta" id="">
             <option value="">etiquetar</option>
             <?php
                 $sql = "select * from todopro.etiquetas";

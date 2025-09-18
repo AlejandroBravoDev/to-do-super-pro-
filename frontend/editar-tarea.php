@@ -28,12 +28,12 @@
     <form method="post" action="../backend/action-editar-tarea.php">
         <input type="hidden" name="id_tarea" value="<?=$_POST['id_tarea'] ?? ''?>">
         <label for="">Crear Tarea</label>
-        <input type="text" name="titulo" placeholder="tarea">
+        <input type="text" name="titulo" placeholder="tarea" value="<?= $tarea['titulo'] ?>">
         <label for="">fecha de vencimineto</label>
         <input type="date" name="fecha-vencimiento">
         <label for="">prioridad</label>
         <select name="prioridad" id="">
-            <option value="">prioridad</option>
+            <option value="<?=$tarea['prioridad']?>"><?=$tarea['prioridad']?></option>
             <option value="alta">alta</option>
             <option value="media">media</option>
             <option value="baja">baja</option>
@@ -43,23 +43,24 @@
         <!--select prioridad (alta, media y baja)-->
         <label for="">estado</label>
         <select name="estado" id="">
-            <option value="">seleccionar estado</option>
+            <option value="<?= $tarea['estado']?>"><?= $tarea['estado']?></option>
             <option value="completada">completada</option>
             <option value="enProceso">en proceso</option>
         </select>
         <label for="">asignar</label>
         <select name="asignar-usuario" id="">
-            <option value="">asignar usuario</option>
+            <option value="<?= $tarea['nombre_asignado']?>"><?= $tarea['nombre_asignado']?></option>
             <?php
-            $sql = "select * from todopro.usuarios";
-            $resultado = mysqli_query($conexion, $sql);
+                $sql = "SELECT * FROM todopro.usuarios";
+                $resultado = mysqli_query($conexion, $sql);
 
-            if ($resultado ->num_rows > 0) {
-                while ($row = $resultado -> fetch_assoc()) {
-                    echo "<option value='" . $row["nombre"] . "'>" . $row["nombre"] . "</option>";
+                if($resultado->num_rows > 0){
+                    while($row = $resultado->fetch_assoc()){
+                        echo "<option value='".$row['nombre']."'>".$row['nombre']."</option>";
+                    }
                 }
-            }
             ?>
+
         </select>
         <!-- select de usuarios -->
 
@@ -67,7 +68,7 @@
         <select name="asignar-proyecto" id="">
             <option value="">asignar proyecto</option>
             <?php
-            $sql = "select *     from todopro.proyectos";
+            $sql = "select * from todopro.proyectos";
             $resultado = mysqli_query($conexion, $sql);
 
             if ($resultado ->num_rows > 0) {
