@@ -267,8 +267,6 @@
             <option value="baja">baja</option>
         </select>
 
-
-        <!--select prioridad (alta, media y baja)-->
         <label for="">estado</label>
         <select name="estado" id="">
             <option value="completada">completada</option>
@@ -288,7 +286,6 @@
                 }
             ?>
         </select>
-        <!-- select de usuarios -->
 
         <label for="">proyecto</label>
         <select name="asignar-proyecto" id="">
@@ -304,7 +301,6 @@
                 }
             ?>
         </select>
-        <!--Select para proyectos-->
         <label for="">etiquetas</label>
         <select name="asignar-usuario" id="">
             <option value="">etiquetar</option>
@@ -326,7 +322,6 @@
             <a href="etiquetas.php">Crear etiqueta</a>
         </div>
     </form>
-    <!-- $sql = select * from tareas where id_creador = $_SESSION["id"]-->
    
 </body>
 </html>

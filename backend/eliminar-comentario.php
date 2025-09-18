@@ -3,7 +3,7 @@ session_start();
 
 $archivo = "../backend/comentarios.json";
 
-// Si existe el archivo de comentarios
+//Crea el archivo json si este no existe
 if (file_exists($archivo)) {
     $comentarios = json_decode(file_get_contents($archivo), true);
 

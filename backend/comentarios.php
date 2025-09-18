@@ -1,6 +1,6 @@
 <?php
 session_start();
-//En donde se guarda el archivo
+//Ruta de el archivo
 $archivo = "../backend/comentarios.json";
 
 //Crea el archivo json si este no existe
@@ -10,7 +10,7 @@ if (!file_exists($archivo)) {
 
 $comentarios = json_decode(file_get_contents($archivo), true);
 
-// Guardar nuevo comentario
+//Guardar el nuevo comentario
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["comentario"]) && isset($_POST["tarea_id"])) {
     $tarea_id = $_POST["tarea_id"];
     $comentario = trim($_POST["comentario"]);
