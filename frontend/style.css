@@ -1,30 +1,143 @@
-body{
-  font-family: "Poppins", sans-serif;
+/* 🎨 Estilos globales */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f6fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
 }
-form{
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    gap: 10px;
+
+h1, h2, h3, h4 {
+    font-weight: 600;
+    color: #2d3436;
 }
-form h1{
-    font-weight: 700;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+/* 🔍 Barra de búsqueda */
+form {
+    margin-bottom: 20px;
 }
-.links{
+
+select, input[type="text"], input[type="date"], select, button {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 20px;
-    
+    font-size: 14px;
 }
-.mostrar_tareas{
+
+button {
+    background: #0984e3;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s ease;
+    border-radius: 6px;
+    padding: 10px 15px;
+}
+
+button:hover {
+    background: #74b9ff;
+}
+
+/* 📋 Mis Tareas */
+.mostrar_tareas {
+    margin: 20px auto;
+    max-width: 900px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* Cada tarea */
+.mostrar_tareas tr td {
+    padding: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.mostrar_tareas ul {
+    list-style: none;
+    padding-left: 15px;
+}
+
+.mostrar_tareas li {
+    padding: 5px 0;
+    border-left: 3px solid #0984e3;
+    margin: 5px 0;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+.mostrar_tareas li form {
+    display: inline;
+}
+
+.mostrar_tareas p {
+    color: #636e72;
+}
+
+/* 📝 Formulario de crear tareas */
+.crearTareas {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.crearTareas h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2d3436;
+}
+
+.crearTareas label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.crearTareas select,
+.crearTareas input[type="text"],
+.crearTareas input[type="date"] {
     width: 100%;
+    padding: 10px;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    margin-bottom: 15px;
 }
-.links2{
-   margin-left: 20px;
+
+.crearTareas button {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.crearTareas .links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.crearTareas .links a {
+    text-decoration: none;
+    color: #0984e3;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.crearTareas .links a:hover {
+    color: #74b9ff;
+}
+
+/* 📂 Archivos adjuntos */
+form input[type="file"] {
+    border: none;
+    margin: 10px 0;
 }

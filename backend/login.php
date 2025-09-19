@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($error_correo) && empty($error_contrasena)) {
-        $sql = "SELECT id, nombre, correo, clave_hash FROM usuarios WHERE correo = ?";
+        $sql = "SELECT id, nombre, correo, clave_hash, rol FROM usuarios WHERE correo = ?";
         if ($stmt = $conexion->prepare($sql)) {
             $stmt->bind_param("s", $correo);
             $stmt->execute();
@@ -34,8 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION["id"] = $usuario["id"];
                     $_SESSION["nombre"] = $usuario["nombre"];
                     $_SESSION["correo"] = $usuario["correo"];
+                    $_SESSION["rol"] = $usuario["rol"]; // Guardamos el rol aquí
+
                     header("Location: frontend/interfaz.php");
-                    echo "inicio de sesion exitoso.";
                     exit;
                 } else {
                     $error_contrasena = "La contraseña es incorrecta";
@@ -49,5 +50,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 ?>
+
