@@ -19,8 +19,9 @@ $resultado = $conexion->query($sql);
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <?php include("includes/header.php");?>
     <h1>Proyectos existentes</h1>
-    <ul>
+    <ul class="proyectos-lista">
         <?php if ($resultado && $resultado->num_rows > 0): ?>
             <?php while ($row = $resultado->fetch_assoc()): ?>
                 <li>
@@ -40,8 +41,8 @@ $resultado = $conexion->query($sql);
         <?php endif; ?>
     </ul>
     <div class="links2">
-        <a href="proyectos.php">Volver a proyectos</a>
+        <a href="proyectos.php">Volver a crear proyectos</a>
     </div>
-
+     <?php include("includes/footer.php");?>
 </body>
 </html>
