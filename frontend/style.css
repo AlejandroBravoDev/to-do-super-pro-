@@ -10,6 +10,7 @@ body {
 h1, h2, h3, h4 {
     font-weight: 600;
     color: #2d3436;
+    text-align: center;
 }
 
 form {
@@ -22,6 +23,7 @@ select, input[type="text"], input[type="date"], button {
     border: 1px solid #dcdde1;
     border-radius: 6px;
     font-size: 14px;
+   
 }
 
 button {
@@ -38,7 +40,16 @@ button {
 button:hover {
     background: #74b9ff;
 }
-
+.buscador{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 40px;
+   gap: 20px;
+}
+.buscador input{
+    width: 1150px;
+}
 /* Contenedor principal */
 .contenedor-principal {
     max-width: 1200px;
