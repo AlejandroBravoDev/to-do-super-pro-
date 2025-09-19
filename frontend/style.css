@@ -10,7 +10,7 @@ body {
 h1, h2, h3, h4 {
     font-weight: 600;
     color: #2d3436;
-    text-align: center;
+    
 }
 
 form {
@@ -61,6 +61,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     gap: 32px;
+    height: auto;
 }
 .contenedor-principal h1,
 .contenedor-principal h2,
@@ -71,93 +72,76 @@ button:hover {
 
 /* Tarjetas de tareas */
 .tarea-card {
-    max-width: 1000px;
+    background: #f8faff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 32px 40px;
     margin: 32px auto;
-    background: #fff;
-    padding: 24px 40px;
-    border-radius: 16px;
-    box-shadow: none;
+    max-width: 700px;
+    color: #2d3436;
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
 
-
-.tarea-header {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 8px;
-}
-
 .tarea-info {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 0;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #000000;
 }
-
-.tarea-header .acciones {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 0;
+.misTareas{
+    text-align: center;
+    font-size: 40px;
+    margin-top: 20px;
+    
 }
-
-.tarea-header .acciones button {
-    width: auto;
-    min-width: 90px;
-    padding: 8px 18px;
-    font-size: 15px;
-    margin: 0;
-}
-
 .acciones {
     display: flex;
-    flex-wrap: wrap;
     gap: 12px;
-    align-items: center;
     margin-bottom: 8px;
 }
 
-.acciones form {
-    margin: 0;
-    display: flex;
-    align-items: center;
+.acciones button {
+    padding: 8px 18px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: none;
+    background: #0984e3;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
-.form-adjunto {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
+.acciones button:hover {
+    background: #74b9ff;
 }
 
 .form-adjunto label {
-    font-size: 14px;
     font-weight: 500;
     margin-right: 8px;
-    margin-bottom: 0;
 }
 
 .form-adjunto input[type="file"] {
-    width: auto;
-    margin: 0;
-    border: none;
-}
-
-.form-adjunto button {
-    width: auto;
-    padding: 8px 18px;
-    margin: 0;
+    margin-right: 10px;
 }
 
 .subtareas,
 .comentarios {
     margin-top: 10px;
+}
+
+.subtareas ul,
+.comentarios ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.subtareas li,
+.comentarios li {
+    margin-bottom: 6px;
+    font-size: 15px;
 }
 
 .form-subtarea,
@@ -170,15 +154,26 @@ button:hover {
 .form-subtarea input,
 .form-comentario input {
     flex: 1;
-    width: auto;
-    margin: 0;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #dcdde1;
 }
 
 .form-subtarea button,
 .form-comentario button {
-    width: auto;
     padding: 8px 18px;
-    margin: 0;
+    border-radius: 6px;
+    background: #0984e3;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.form-subtarea button:hover,
+.form-comentario button:hover {
+    background: #74b9ff;
 }
 
 .subtareas ul,
@@ -251,7 +246,7 @@ button:hover {
 
 /* Crear tareas */
 .crearTareas {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 32px auto;
     background: #fff;
     padding: 24px 40px;
@@ -262,7 +257,7 @@ button:hover {
     gap: 18px;
 }
 
-.crearTareas h2 {
+.crearTareas h1 {
     margin-bottom: 20px;
     text-align: center;
     color: #2d3436;
@@ -459,6 +454,338 @@ form input[type="file"] {
     }
 }
 
+.form-opciones-busqueda {
+    width: 70%;
+    margin: 0 auto 32px auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #f8faff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 16px 24px;
+}
+
+.form-opciones-busqueda select {
+    width: 60%;
+    font-size: 16px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #dcdde1;
+    background: #fff;
+    color: #2d3436;
+}
+.Opciones{
+    text-align: center;
+    font-size: 40px;
+}
+.form-opciones-busqueda button {
+    padding: 10px 22px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: none;
+    background: #0984e3;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.form-opciones-busqueda button:hover {
+    background: #fff;
+    color: #0984e3;
+    border:1px solid #0984e3;
+}
+
+#btn-ocultar-detalles {
+    background: #fff;
+    color: #0984e3;
+    border: 1px solid #0984e3;
+}
+
+#btn-ocultar-detalles:hover {
+    background: #0984e3;
+    color: #fff;
+}
+#detalles-bloque {
+    background: #f8faff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 40px 40px;
+    margin: 32px auto;
+    max-width: 700px;
+    color: #2d3436;
+}
+
+#detalles-bloque h3 {
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #0984e3;
+    font-size: 2rem;
+    text-align: left;
+}
+
+#detalles-bloque h4 {
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    color: #0984e3;
+    font-size: 1.2rem;
+}
+
+#detalles-bloque p {
+    margin-bottom: 14px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+#detalles-bloque ul {
+    margin: 10px 0 0 24px;
+    padding: 0;
+    font-size: 15px;
+}
+
+#detalles-bloque li {
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+#detalles-bloque i {
+    color: #636e72;
+    font-style: italic;
+}
+/*estilos form crear proyectos*/
+.contenedor-form-proyecto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.form-proyecto {
+    background: #f8faff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 40px 48px;
+    max-width: 420px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-proyecto h1 {
+    color: #0984e3;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.form-proyecto label {
+    font-weight: 500;
+    color: #2d3436;
+    margin-bottom: 4px;
+}
+
+.form-proyecto input,
+.form-proyecto textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 10px;
+    background: #fff;
+    resize: none;
+}
+
+.form-proyecto textarea {
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.form-proyecto button {
+    background: #0984e3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.form-proyecto button:hover {
+    background: #74b9ff;
+}
+
+.form-proyecto .links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 12px;
+}
+
+.form-proyecto .links a {
+    color: #0984e3;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.form-proyecto .links a:hover {
+    color: #74b9ff;
+}
+.mensaje{
+    z-index: 9999;
+    text-align: center;
+}
+/*Visualizaciones de los proyectos*/
+.proyectos-lista {
+    max-width: 700px;
+    margin: 40px auto 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+.proyectos-lista li {
+    background: #f8faff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 28px 32px 18px 32px;
+    margin-bottom: 28px;
+    color: #2d3436;
+    position: relative;
+}
+
+.proyectos-lista strong {
+    color: #000000;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.proyectos-lista em {
+    color: #0984e3;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.proyectos-lista small {
+    display: block;
+    margin-top: 10px;
+    color: #636e72;
+    font-size: 14px;
+}
+
+.proyectos-lista form {
+    display: inline-block;
+    margin-top: 12px;
+}
+
+.proyectos-lista button {
+    background: #0984e3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-left: 0;
+}
+
+.proyectos-lista button:hover {
+    background: #e74c3c;
+}
+
+.links2 {
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+    display: flex;
+    justify-content: flex-start;
+    gap: 18px;
+}
+
+.links2 a {
+    color: #0984e3;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+    text-align: center;
+}
+
+.links2 a:hover {
+    color: #fff;
+
+}
+
+h1 {
+    text-align: center;
+    color: #000000;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+/*form editar tarea*/
+.contenedor-editar-tarea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.form-editar-tarea {
+    background: #f8faff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 40px 48px;
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-editar-tarea label {
+    font-weight: 500;
+    color: #2d3436;
+    margin-bottom: 4px;
+}
+
+.form-editar-tarea input,
+.form-editar-tarea select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+
+.form-editar-tarea button {
+    background: #0984e3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.form-editar-tarea button:hover {
+    background: #74b9ff;
+}
+
 /*estilos para el crear etiquetas*/
 
 .container_etiquetas{
@@ -572,4 +899,5 @@ form input[type="file"] {
     border: 1px solid #dcdde1;
     border-radius: 6px;
     font-size: 14px;
+
 }

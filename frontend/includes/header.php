@@ -6,7 +6,6 @@
         <ul>
             <li><a href="interfaz.php" class="vinculos">Inicio</a></li>
             <li><a href="proyectos.php" class="vinculos">Proyectos</a></li>
-            <li><a href="tareas.php" class="vinculos">Tareas</a></li>
             <li><a href="perfil.php" class="vinculos">Mi Perfil</a></li>
 
             <?php if (isset($_SESSION["id"])): ?>

@@ -1,6 +1,6 @@
 <?php
 require_once 'conexion.php';
-
+$mensaje = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre        = trim($_POST['nombre'] ?? '');
     $descripcion   = trim($_POST['descripcion'] ?? '');
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("ssiss", $nombre, $descripcion, $id_propietario, $fecha, $fecha);
 
     if ($stmt->execute()) {
-        echo "Proyecto creado correctamente.";
+        $mensaje = "Proyecto creado correctamente.";
     } else {
         echo "Error al crear el proyecto: " . $stmt->error;
     }

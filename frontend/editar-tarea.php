@@ -25,9 +25,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <form method="post" action="../backend/action-editar-tarea.php">
+    <?php include("includes/header.php");?>
+    <div class="contenedor-editar-tarea">
+    <form method="post" action="../backend/action-editar-tarea.php" class="form-editar-tarea">
         <input type="hidden" name="id_tarea" value="<?=$_POST['id_tarea'] ?? ''?>">
-        <label for="">Crear Tarea</label>
+        <label for="">Editar tarea</label>
         <input type="text" name="titulo" placeholder="tarea" value="<?= $tarea['titulo'] ?>">
         <label for="">fecha de vencimineto</label>
         <input type="date" name="fecha-vencimiento">
@@ -81,8 +83,11 @@
         <!--Select para proyectos-->
 
         <button type="submit">Editar</button>
+        <a href="interfaz.php">Volver a inicio</a>
 
 
     </form>
+    </div>
+    <?php include("includes/footer.php");?>
 </body>
 </html>
