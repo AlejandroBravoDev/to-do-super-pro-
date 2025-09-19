@@ -206,151 +206,24 @@ if (isset($_GET['query'])) {
 ?> 
 </div> 
 
-<h1>Mis Tareas</h1> 
-<div class="mostrar_tareas"> 
 
-    </div>
     <h1>Mis Tareas</h1>
     <div class="mostrar_tareas">
         
-    <?php 
-
-      if ($rol === "admin") {
-          $sql = "SELECT * FROM tareas";
-      } else {
-          if ($idUsuario) {
-              $sql = "SELECT * FROM tareas WHERE id_creador = $idUsuario OR id_asignado = $idUsuario"; 
-          } else {
-              $sql = "SELECT * FROM tareas WHERE 1=0";//No sale nada si no se ha iniciado sesion
-          }
-    ?>
+<?php
+if ($rol === "admin") {
+    $sql = "SELECT * FROM tareas";
+}else {
+if ($idUsuario) {
+    $sql = "SELECT * FROM tareas WHERE id_creador = $idUsuario OR id_asignado = $idUsuario"; 
+} else {
+    $sql = "SELECT * FROM tareas WHERE 1=0";//No sale nada si no se ha iniciado sesion    
+}
+}
+?>
       
         <?php
-     
-        $sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
-        $resultado = mysqli_query($conexion, $sql);
-            if ($resultado ->num_rows > 0) {
-                echo "<table ='1'>";
-                $visto = [];
-                    while ($row = $resultado -> fetch_assoc()) {
-                        if(in_array($row["titulo"], $visto)){
-                            continue;
-                        }
-
-                        $visto[] = $row["titulo"];
-
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row["titulo"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["nombre_proyecto"]) . "</td>";
-                        echo "<td>
-                                <form method='post' action='../backend/action-eliminar-tarea.php'>
-                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
-                                    <button type='submit' style='width: 100px;'>Eliminar</button>
-                                </form>
-                              </td>";
-                        echo "<td>
-                                <form method='post' action='../frontend/editar-tarea.php'>
-                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
-                                    <button type='submit' style='width: 100px;'>Editar</button>
-                                </form>
-                             </td>";
-                        echo "<td>
-                                <form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data'>
-                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
-                                    <label>subir archivo adjunto</label>
-                                    <input type='file' name='archivo' id='archivo'>
-                                    <button type='submit'>subir</button>
-                                </form>
-                              </td>";
-                        echo "<tr>";
-                        //Form para comentar
-                        echo "<tr><td colspan='7'>";
-                        echo "<form method='post' action='../backend/comentarios.php'>";
-                        echo "<input type='hidden' name='tarea_id' value='" . $row['id'] . "'>";
-                        echo "<input type='text' name='comentario' placeholder='Escribe un comentario...' required>";
-                        echo "<button type='submit'>Enviar</button>";
-                        echo "</form>";
-
-                         
-                        //Mostrar comentarios abajo de cada tarea
-                        $archivoComentarios = "../backend/comentarios.json";
-                        if (file_exists($archivoComentarios)) {
-                        $comentarios = json_decode(file_get_contents($archivoComentarios), true);
-                        echo "<ul>";
-                        $tieneComentarios = false;
-                            foreach ($comentarios as $index => $c) {
-                                if ($c["tarea_id"] == $row['id']) {
-                                $usuarioComentario = isset($c["usuario"]) ? $c["usuario"] : "Anónimo";
-                                echo "<li>";
-                                echo "<b>".$usuarioComentario.":</b> ".$c["comentario"];
-                                //Botón eliminar
-                                echo " <form method='post' action='../backend/eliminar-comentario.php' onsubmit='return confirm(\"¿Estás seguro de que deseas eliminar este comentario?\");'>";
-                                echo "<input type='hidden' name='index' value='".$index."'>";
-                                echo "<button type='submit'>Eliminar</button>";
-                                echo "</form>";
-                                echo "</li>";
-                                $tieneComentarios = true;
-                                }
-                            }
-                            if (!$tieneComentarios) {
-                                echo "<li>No hay comentarios aún.</li>";
-                            }
-                            echo "</ul>";
-                        }
-                    }
-                echo "</td></tr>";
-                echo "</table>";
-                
-            }
-        ?>
-
-        <h1>tareas asignadas</h1>
-        <?php
-            $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
-            $resultado = mysqli_query($conexion, $sql);
-                if ($resultado ->num_rows > 0) {
-                    echo "<table ='1'>";
-                    $visto = [];
-                        while ($row = $resultado -> fetch_assoc()) {
-                            if(in_array($row["titulo"], $visto)){
-                                continue;
-                            }
-
-                            $visto[] = $row["titulo"];
-
-                            echo "<tr>";
-                            echo "<td>" . htmlspecialchars($row["titulo"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["nombre_proyecto"]) . "</td>";
-                            echo "<td>
-                                <form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data'>
-                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
-                                    <label>subir archivo adjunto</label>
-                                    <input type='file' name='archivo' id='archivo'>
-                                    <button type='submit'>subir</button>
-                                </form>
-                              </td>";
-                            echo "<tr>";
-                        }
-                    echo "</td></tr>";
-                    echo "</table>";
-                    
-                }
-
-        ?>
-    </div>
-}
+$sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
 $resultado = mysqli_query($conexion, $sql); 
 
 if ($resultado ->num_rows > 0) { 
@@ -359,26 +232,21 @@ if ($resultado ->num_rows > 0) {
         if(in_array($row["titulo"], $visto)){ continue; } 
         $visto[] = $row["titulo"]; 
         echo '<div class="tarea-card">';
-        // Nuevo header con info y botones
         echo '<div class="tarea-header">';
         echo '<div class="tarea-info">';
         echo "<b>" . htmlspecialchars($row["titulo"]) . "</b> | Estado: " . htmlspecialchars($row["estado"]) . " | Prioridad: " . htmlspecialchars($row["prioridad"]) . " | Vence: " . htmlspecialchars($row["fecha_vencimiento"]);
         echo "</div>";
         echo '<div class="acciones">';
-        // Eliminar
         echo "<form method='post' action='../backend/action-eliminar-tarea.php'> 
                 <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
                 <button type='submit'>Eliminar</button> 
               </form>";
-        // Editar
         echo "<form method='post' action='../frontend/editar-tarea.php'> 
                 <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
                 <button type='submit'>Editar</button> 
               </form>";
         echo '</div>';
-        echo '</div>'; // cierre tarea-header
-
-        // Adjuntos
+        echo '</div>';
         echo "<form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data' class='form-adjunto'> 
                 <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
                 <label>Subir archivo adjunto</label> 
@@ -395,6 +263,7 @@ if ($resultado ->num_rows > 0) {
         echo "</form>";
 
         // Muestro las subtareas
+        
         if (!empty($row["subtareas"])) {
             echo "<ul>";
             $lista_subtareas = explode(",", $row["subtareas"]);
@@ -452,9 +321,53 @@ if ($resultado ->num_rows > 0) {
 ?> 
 </div>
 
+        <h1>tareas asignadas</h1>
+        <?php
+            $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
+            $resultado = mysqli_query($conexion, $sql);
+                if ($resultado ->num_rows > 0) {
+                    echo "<table ='1'>";
+                    $visto = [];
+                        while ($row = $resultado -> fetch_assoc()) {
+                            if(in_array($row["titulo"], $visto)){
+                                continue;
+                            }
+
+                            $visto[] = $row["titulo"];
+
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row["titulo"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["nombre_proyecto"]) . "</td>";
+                            echo "<td>
+                                <form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data'>
+                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
+                                    <label>subir archivo adjunto</label>
+                                    <input type='file' name='archivo' id='archivo'>
+                                    <button type='submit'>subir</button>
+                                </form>
+                              </td>";
+                            echo "<tr>";
+                        }
+                    echo "</td></tr>";
+                    echo "</table>";
+                    
+                }
+            
+
+        ?>
+    </div>
+
+
+
     
     <form method="post" class="crearTareas" action="../backend/action-crear-tarea.php">
-        <h2>Crea tu tarea</h2>
+        <h1>Crea tu tarea</h1>
         <label for="">Nombre</label>
         <input type="text" name="titulo" placeholder="tarea">
         <label for="">fecha de vencimineto</label>

@@ -50,15 +50,41 @@ require_once "../backend/conexion.php";
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="../frontend/style.css">
+    <title>Etiquetas</title>
 </head>
-<body>
-<form action="" method="post">
-    <input type="hidden" name="id_etiqueta" value='<?=$_POST['id_etiqueta'];?>'>
-    <input type="text" name="etiqueta">
-    <button type="submit">crear</button>
-    <button name="eliminar" type="submit">eliminar</button>
-    <?=$mensaje;?>
-</form>
+<body >
+    <div class="container_etiquetas">
+        <h1>Crear Etiquetas</h1>
+        <form action="" method="post" class="form_crear_etiqueta">
+            <input type="hidden" name="id_etiqueta" value='<?=$_POST['id_etiqueta'];?>'>
+            <input type="text" name="etiqueta" placeholder="crea tu etiqueta">
+            <button type="submit">crear</button>
+
+            <?php
+                
+                
+            ?>
+            <?=$mensaje;?>
+        </form>
+
+        <div class="mostrar_etiquetas">
+            <h1>etiquetas creadas</h1>
+            <div class="etiquetas">
+                <?php
+                    $sql = "SELECT nombre FROM etiquetas";
+                    $resultado = mysqli_query($conexion, $sql);
+                    if ($resultado ->num_rows > 0) { 
+                        while($row = $resultado->fetch_assoc()) {
+                            echo "<div class='etiqueta_individual'>".$row['nombre']."</div>";
+                        }
+                    } else {
+                        echo "no hay etiquetas";
+                    }
+                ?>    
+            </div>
+            
+        </div>
+    </div>
 </body>
 </html>
