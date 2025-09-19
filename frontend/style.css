@@ -1,4 +1,4 @@
-/* 🎨 Estilos globales */
+
 body {
     font-family: 'Poppins', sans-serif;
     background: #f5f6fa;
@@ -12,7 +12,7 @@ h1, h2, h3, h4 {
     color: #2d3436;
 }
 
-/* 🔍 Barra de búsqueda */
+
 form {
     margin-bottom: 20px;
 }
@@ -41,7 +41,7 @@ button:hover {
     background: #74b9ff;
 }
 
-/* 📋 Mis Tareas */
+
 .mostrar_tareas {
     margin: 20px auto;
     max-width: 900px;
@@ -51,7 +51,7 @@ button:hover {
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-/* Cada tarea */
+
 .mostrar_tareas tr td {
     padding: 10px;
     border-bottom: 1px solid #ecf0f1;
@@ -78,7 +78,7 @@ button:hover {
     color: #636e72;
 }
 
-/* 📝 Formulario de crear tareas */
+
 .crearTareas {
     max-width: 600px;
     margin: 40px auto;
@@ -136,7 +136,7 @@ button:hover {
     color: #74b9ff;
 }
 
-/* 📂 Archivos adjuntos */
+
 form input[type="file"] {
     border: none;
     margin: 10px 0;

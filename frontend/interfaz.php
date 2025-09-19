@@ -214,7 +214,7 @@ if ($rol === "admin") {
     if ($idUsuario) {
         $sql = "SELECT * FROM tareas WHERE id_creador = $idUsuario OR id_asignado = $idUsuario"; 
     } else {
-        $sql = "SELECT * FROM tareas WHERE 1=0"; // nunca devuelve resultados si no hay usuario
+        $sql = "SELECT * FROM tareas WHERE 1=0";//No sale nada si no se ha iniciado sesion
     }
 }
 $resultado = mysqli_query($conexion, $sql); 
@@ -258,7 +258,7 @@ if ($resultado ->num_rows > 0) {
         echo "<tr><td colspan='7'>";
         echo "<form method='post' action='../backend/action-crear-subtarea.php'>";
         echo "<input type='hidden' name='id_tarea' value='" . $row['id'] . "'>";
-        echo "<input type='text' name='subtarea' placeholder='Escribe una subtarea...' required>";
+        echo "<input type='text' name='subtarea' placeholder='Añade una subtarea' required>";
         echo "<button type='submit'>Crear Subtarea</button>";
         echo "</form>";
 
@@ -284,7 +284,7 @@ if ($resultado ->num_rows > 0) {
         echo "<tr><td colspan='7'>"; 
         echo "<form method='post' action='../backend/comentarios.php'>"; 
         echo "<input type='hidden' name='tarea_id' value='" . $row['id'] . "'>"; 
-        echo "<input type='text' name='comentario' placeholder='Escribe un comentario...' required>"; 
+        echo "<input type='text' name='comentario' placeholder='Comenta' required>"; 
         echo "<button type='submit'>Enviar</button>"; 
         echo "</form>"; 
 
@@ -305,7 +305,7 @@ if ($resultado ->num_rows > 0) {
                     echo "</form>"; 
                     echo "</li>"; 
                     $tieneComentarios = true; 
-                } 
+                }
             } 
             if (!$tieneComentarios) { 
                 echo "<li>No hay comentarios aún.</li>"; 
