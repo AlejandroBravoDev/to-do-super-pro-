@@ -178,7 +178,10 @@
     </div>
     <h1>Mis Tareas</h1>
     <div class="mostrar_tareas">
+
         <?php
+        
+
         $sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
         $resultado = mysqli_query($conexion, $sql);
             if ($resultado ->num_rows > 0) {
@@ -261,6 +264,46 @@
                 
             }
         ?>
+
+        <h1>tareas asignadas</h1>
+        <?php
+            $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
+            $resultado = mysqli_query($conexion, $sql);
+                if ($resultado ->num_rows > 0) {
+                    echo "<table ='1'>";
+                    $visto = [];
+                        while ($row = $resultado -> fetch_assoc()) {
+                            if(in_array($row["titulo"], $visto)){
+                                continue;
+                            }
+
+                            $visto[] = $row["titulo"];
+
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row["titulo"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["nombre_proyecto"]) . "</td>";
+                            echo "<td>
+                                <form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data'>
+                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
+                                    <label>subir archivo adjunto</label>
+                                    <input type='file' name='archivo' id='archivo'>
+                                    <button type='submit'>subir</button>
+                                </form>
+                              </td>";
+                            echo "<tr>";
+                        }
+                    echo "</td></tr>";
+                    echo "</table>";
+                    
+                }
+
+        ?>
     </div>
     
     <form method="post" class="crearTareas" action="../backend/action-crear-tarea.php">
@@ -282,36 +325,44 @@
             <option value="completada">completada</option>
             <option value="enProceso">en proceso</option>
         </select>
+        
+        <?php
 
-        <label for="">asignar</label>
-        <select name="asignar-usuario" id="">
-            <option value="">asignar usuario</option>
-            <?php
-                $sql = "select * from todopro.usuarios";
-                $resultado = mysqli_query($conexion, $sql);
-
-                if ($resultado ->num_rows > 0) {
-                    while ($row = $resultado -> fetch_assoc()) {
-                        echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+            $sqla = "SELECT * FROM usuarios WHERE id = " . $_SESSION['id'];
+            $resultadoo = mysqli_query($conexion, $sqla);
+            $roww = $resultadoo -> fetch_assoc();
+            if ($roww["rol"] == "admin") {
+                
+                echo '<label for="">asignar</label>';
+                echo '<select name="asignar-usuario" id="">';
+                    echo '<option value="">asignar usuario</option>';
+                    
+                
+                    $sql = "select * from todopro.usuarios";
+                    $resultado = mysqli_query($conexion, $sql);
+                    if ($resultado ->num_rows > 0) {
+                        while ($row = $resultado -> fetch_assoc()) {
+                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                        }
                     }
-                }
-            ?>
-        </select>
+                echo '</select>';
 
-        <label for="">proyecto</label>
-        <select name="asignar-proyecto" id="">
-            <option value="">asignar proyecto</option>
-            <?php
-                $sql = "select nombre from todopro.proyectos";
-                $resultado = mysqli_query($conexion, $sql);
-
-                if ($resultado ->num_rows > 0) {
-                    while ($row = $resultado -> fetch_assoc()) {
-                        echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                echo '<label for="">proyecto</label>';
+                echo '<select name="asignar-proyecto" id="">';
+                    echo '<option value="">asignar proyecto</option>';
+                    
+                
+                    $sql = "select * from todopro.proyectos";
+                    $resultado = mysqli_query($conexion, $sql);
+                    if ($resultado ->num_rows > 0) {
+                        while ($row = $resultado -> fetch_assoc()) {
+                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                        }
                     }
-                }
-            ?>
-        </select>
+                echo '</select>';
+            }
+
+        ?>
         <label for="">etiquetas</label>
         <select name="etiqueta" id="">
             <option value="">etiquetar</option>

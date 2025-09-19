@@ -24,6 +24,7 @@
         <button type="submit">Iniciar sesion</button>
         <div class="links">
             <a href="frontend/register.php">¿no tienes cuenta?, registrate</a>
+            <a href="frontend/recuperar_contrasena.php">¿Olvidaste tu contraseña?</a>
         </div>
     </form>
 </body>
