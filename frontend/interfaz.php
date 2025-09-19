@@ -4,7 +4,7 @@ require_once "../backend/adjuntos.php";
 
 
 $idUsuario = $_SESSION['id'] ?? null; 
-$rol = $_SESSION['rol'] ?? 'usuario'; // admin o usuario 
+$rol = $_SESSION['rol'] ?? 'usuario';
 ?> 
 
 <!DOCTYPE html> 
@@ -14,11 +14,13 @@ $rol = $_SESSION['rol'] ?? 'usuario'; // admin o usuario
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Document</title> 
     <link rel="stylesheet" href="../frontend/style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
 </head> 
 <body> 
-<?php include("buscar.php"); ?> 
-
+<?php include("includes/header.php");?>
+<?php include("includes/buscar.php"); ?> 
+<div class="contenedor-principal">
 <div style="margin-top:20px;"> 
 <?php 
 if (isset($_GET['query'])) { 
@@ -26,7 +28,7 @@ if (isset($_GET['query'])) {
     echo "<h2>Opciones:</h2>"; 
     $opciones = []; 
 
-    // 🔹 Usuarios
+    //Usuarios
     if ($rol === "admin") { 
         $sqlUsuarios = "SELECT id, nombre FROM usuarios WHERE nombre LIKE '%$busqueda%'"; 
     } else { 
@@ -37,7 +39,7 @@ if (isset($_GET['query'])) {
         $opciones[] = [ "tipo" => "usuario", "id" => $row['id'], "nombre" => "Usuario: ".$row['nombre'] ]; 
     } 
 
-    // 🔹 Proyectos
+    //Proyectos
     if ($rol === "admin") { 
         $sqlProyectos = "SELECT id, nombre FROM proyectos WHERE nombre LIKE '%$busqueda%'"; 
     } else { 
@@ -48,7 +50,7 @@ if (isset($_GET['query'])) {
         $opciones[] = [ "tipo" => "proyecto", "id" => $row['id'], "nombre" => "Proyecto: ".$row['nombre'] ]; 
     } 
 
-    // 🔹 Tareas
+    //Tareas
     if ($rol === "admin") { 
         $sqlTareas = "SELECT id, titulo FROM tareas WHERE titulo LIKE '%$busqueda%'"; 
     } else { 
@@ -73,14 +75,14 @@ if (isset($_GET['query'])) {
         echo "<p>No se encontraron resultados.</p>"; 
     } 
 
-    // 🔹 Mostrar detalles
+    //Mostrar detalles
     if (isset($_GET['seleccion'])) { 
         $valor = explode("-", $_GET['seleccion']); 
         $tipo = $valor[0]; 
         $id = intval($valor[1]); 
         echo "<h3>Detalles</h3>"; 
 
-        // Usuario
+        //Usuario
         if ($tipo == "usuario") { 
             if ($rol === "admin" || $id == $idUsuario) { 
                 $sql = "SELECT id, nombre, correo FROM usuarios WHERE id=$id"; 
@@ -90,7 +92,7 @@ if (isset($_GET['query'])) {
                     echo "<b>ID de usuario:</b> ".$fila['id']."<br>"; 
                     echo "<b>Correo:</b> ".$fila['correo']."</p>"; 
 
-                    // Proyectos del usuario
+                    //Proyectos del usuario
                     $sqlP = "SELECT id, nombre FROM proyectos WHERE id_propietario=$id"; 
                     $resP = $conexion->query($sqlP); 
                     echo "<h4>Proyectos:</h4>"; 
@@ -104,7 +106,7 @@ if (isset($_GET['query'])) {
                         echo "<p><i>No tienes ningún proyecto asignado.</i></p>"; 
                     } 
 
-                    // Tareas del usuario
+                    //Tareas del usuario
                     $sqlT = "SELECT id, titulo, prioridad FROM tareas WHERE id_creador=$id OR id_asignado=$id"; 
                     $resT = $conexion->query($sqlT); 
                     echo "<h4>Tareas:</h4>"; 
@@ -123,7 +125,7 @@ if (isset($_GET['query'])) {
             } 
         } 
 
-        // Proyecto
+        //Proyecto
         elseif ($tipo == "proyecto") { 
             if ($rol === "admin") { 
                 $sql = "SELECT id, nombre, descripcion, id_propietario FROM proyectos WHERE id=$id"; 
@@ -158,7 +160,7 @@ if (isset($_GET['query'])) {
             } 
         } 
 
-        // Tarea
+        //Tarea
         elseif ($tipo == "tarea") { 
             if ($rol === "admin") { 
                 $sql = "SELECT id, titulo, prioridad, id_creador, id_asignado, id_proyecto FROM tareas WHERE id=$id"; 
@@ -171,14 +173,14 @@ if (isset($_GET['query'])) {
                 echo "<b>ID de tarea:</b> ".$fila['id']."<br>"; 
                 echo "<b>Prioridad:</b> ".$fila['prioridad']."</p>"; 
 
-                // Creador
+                //Creador
                 $sqlU = "SELECT id, nombre FROM usuarios WHERE id=".$fila['id_creador']; 
                 $resU = $conexion->query($sqlU); 
                 if ($u = $resU->fetch_assoc()) { 
                     echo "<p><b>Creador:</b> ".$u['nombre']."<br>ID: ".$u['id']."</p>"; 
                 } 
 
-                // Asignado
+                //Asignado
                 if ($fila['id_asignado']) { 
                     $sqlA = "SELECT id, nombre FROM usuarios WHERE id=".$fila['id_asignado']; 
                     $resA = $conexion->query($sqlA); 
@@ -187,7 +189,7 @@ if (isset($_GET['query'])) {
                     } 
                 } 
 
-                // Proyecto
+                //Proyecto
                 if ($fila['id_proyecto']) { 
                     $sqlP = "SELECT id, nombre FROM proyectos WHERE id=".$fila['id_proyecto']; 
                     $resP = $conexion->query($sqlP); 
@@ -224,71 +226,68 @@ if ($resultado ->num_rows > 0) {
     while ($row = $resultado -> fetch_assoc()) { 
         if(in_array($row["titulo"], $visto)){ continue; } 
         $visto[] = $row["titulo"]; 
-        echo "<tr>"; 
-        echo "<td>" . htmlspecialchars($row["titulo"]) . "</td>"; 
-        echo "<td>" . htmlspecialchars($row["estado"]) . "</td>"; 
-        echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>"; 
-        echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>"; 
-        echo "<td>" . htmlspecialchars($row["estado"]) . "</td>"; 
-        echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>"; 
-        echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>"; 
-        echo "<td>" . htmlspecialchars($row["nombre_proyecto"]) . "</td>"; 
-        echo "<td> 
-                <form method='post' action='../backend/action-eliminar-tarea.php'> 
-                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
-                    <button type='submit' style='width: 100px;'>Eliminar</button> 
-                </form> 
-              </td>"; 
-        echo "<td> 
-                <form method='post' action='../frontend/editar-tarea.php'> 
-                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
-                    <button type='submit' style='width: 100px;'>Editar</button> 
-                </form> 
-              </td>"; 
-        echo "<td> 
-                <form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data'> 
-                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
-                    <label>subir archivo adjunto</label> 
-                    <input type='file' name='archivo' id='archivo'> 
-                    <button type='submit'>subir</button> 
-                </form> 
-              </td>"; 
-        echo "<tr>"; 
-        //Form para crear subtarea
-        echo "<tr><td colspan='7'>";
-        echo "<form method='post' action='../backend/action-crear-subtarea.php'>";
+        echo '<div class="tarea-card">';
+        // Nuevo header con info y botones
+        echo '<div class="tarea-header">';
+        echo '<div class="tarea-info">';
+        echo "<b>" . htmlspecialchars($row["titulo"]) . "</b> | Estado: " . htmlspecialchars($row["estado"]) . " | Prioridad: " . htmlspecialchars($row["prioridad"]) . " | Vence: " . htmlspecialchars($row["fecha_vencimiento"]);
+        echo "</div>";
+        echo '<div class="acciones">';
+        // Eliminar
+        echo "<form method='post' action='../backend/action-eliminar-tarea.php'> 
+                <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
+                <button type='submit'>Eliminar</button> 
+              </form>";
+        // Editar
+        echo "<form method='post' action='../frontend/editar-tarea.php'> 
+                <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
+                <button type='submit'>Editar</button> 
+              </form>";
+        echo '</div>';
+        echo '</div>'; // cierre tarea-header
+
+        // Adjuntos
+        echo "<form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data' class='form-adjunto'> 
+                <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
+                <label>Subir archivo adjunto</label> 
+                <input type='file' name='archivo' id='archivo'> 
+                <button type='submit'>Subir</button> 
+              </form>";
+
+        // Form para crear subtarea
+        echo '<div class="subtareas">';
+        echo "<form class='form-subtarea' method='post' action='../backend/action-crear-subtarea.php'>";
         echo "<input type='hidden' name='id_tarea' value='" . $row['id'] . "'>";
         echo "<input type='text' name='subtarea' placeholder='Añade una subtarea' required>";
         echo "<button type='submit'>Crear Subtarea</button>";
         echo "</form>";
 
-        //Muestro las subtareas
+        // Muestro las subtareas
         if (!empty($row["subtareas"])) {
             echo "<ul>";
             $lista_subtareas = explode(",", $row["subtareas"]);
             foreach ($lista_subtareas as $sub) {
                 $sub = trim($sub);
                 echo "<li>" . htmlspecialchars($sub);
-                echo " <form method='post' action='../backend/action-eliminar-subtarea.php' style='display:inline; margin-left:10px;'>";
+                echo " <form method='post' action='../backend/action-eliminar-subtarea.php'>";
                 echo "<input type='hidden' name='id_tarea' value='" . $row['id'] . "'>";
                 echo "<input type='hidden' name='subtarea' value='" . htmlspecialchars($sub) . "'>";
                 echo "<button type='submit'>Eliminar</button>";
                 echo "</form></li>";
             }
-        echo "</ul>";
-        } else {
-            echo "<p><i>No hay subtareas aún.</i></p>";
+            echo "</ul>";
         }
+        echo '</div>';
 
-        //Form para comentar
-        echo "<tr><td colspan='7'>"; 
-        echo "<form method='post' action='../backend/comentarios.php'>"; 
+        // Form para comentar
+        echo '<div class="comentarios">';
+        echo "<form class='form-comentario' method='post' action='../backend/comentarios.php'>"; 
         echo "<input type='hidden' name='tarea_id' value='" . $row['id'] . "'>"; 
         echo "<input type='text' name='comentario' placeholder='Comenta' required>"; 
         echo "<button type='submit'>Enviar</button>"; 
         echo "</form>"; 
 
-        //Muestro los comentarios
+        // Muestro los comentarios
         $archivoComentarios = "../backend/comentarios.json"; 
         if (file_exists($archivoComentarios)) { 
             $comentarios = json_decode(file_get_contents($archivoComentarios), true); 
@@ -297,13 +296,13 @@ if ($resultado ->num_rows > 0) {
             foreach ($comentarios as $index => $c) { 
                 if ($c["tarea_id"] == $row['id']) { 
                     $usuarioComentario = isset($c["usuario"]) ? $c["usuario"] : "Anónimo"; 
-                    echo "<li>"; 
+                    echo "<li>";
                     echo "<b>".$usuarioComentario.":</b> ".$c["comentario"]; 
-                    echo " <form method='post' action='../backend/eliminar-comentario.php' onsubmit='return confirm(\"¿Estás seguro de que deseas eliminar este comentario?\");'>"; 
-                    echo "<input type='hidden' name='index' value='".$index."'>"; 
-                    echo "<button type='submit'>Eliminar</button>"; 
-                    echo "</form>"; 
-                    echo "</li>"; 
+                    echo " <form method='post' action='../backend/eliminar-comentario.php' onsubmit='return confirm(\"¿Estás seguro de que deseas eliminar este comentario?\");'>";
+                    echo "<input type='hidden' name='index' value='".$index."'>";
+                    echo "<button type='submit'>Eliminar</button>";
+                    echo "</form>";
+                    echo "</li>";
                     $tieneComentarios = true; 
                 }
             } 
@@ -311,9 +310,11 @@ if ($resultado ->num_rows > 0) {
                 echo "<li>No hay comentarios aún.</li>"; 
             } 
             echo "</ul>"; 
-        } 
+        }
+        echo '</div>';
+        echo '</div>';
     } 
-} else { 
+}  else { 
     echo "<p><i>No tienes ninguna tarea asignada.</i></p>"; 
 } 
 ?> 
@@ -389,6 +390,9 @@ if ($resultado ->num_rows > 0) {
             <a href="etiquetas.php">Crear etiqueta</a>
         </div>
     </form>
+    </div>
+
+    <?php include("includes/footer.php");?>
    
 </body>
 </html>

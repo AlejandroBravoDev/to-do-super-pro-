@@ -1,7 +1,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #f5f6fa;
+    background: #74b9ff;
     margin: 0;
     padding: 0;
     color: #333;
@@ -12,17 +12,15 @@ h1, h2, h3, h4 {
     color: #2d3436;
 }
 
-
 form {
     margin-bottom: 20px;
 }
 
-select, input[type="text"], input[type="date"], select, button {
+select, input[type="text"], input[type="date"], button {
     padding: 10px;
     margin: 5px 0;
     border: 1px solid #dcdde1;
     border-radius: 6px;
-    width: 100%;
     font-size: 14px;
 }
 
@@ -41,16 +39,178 @@ button:hover {
     background: #74b9ff;
 }
 
-
-.mostrar_tareas {
-    margin: 20px auto;
-    max-width: 900px;
+/* Contenedor principal */
+.contenedor-principal {
+    max-width: 1200px;
+    margin: 40px auto 40px auto;
+    padding: 30px 40px;
     background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.contenedor-principal h1,
+.contenedor-principal h2,
+.contenedor-principal h3,
+.contenedor-principal h4 {
+    margin-top: 0;
 }
 
+/* Tarjetas de tareas */
+.tarea-card {
+    max-width: 1000px;
+    margin: 32px auto;
+    background: #fff;
+    padding: 24px 40px;
+    border-radius: 16px;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+.tarea-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 8px;
+}
+
+.tarea-info {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tarea-header .acciones {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.tarea-header .acciones button {
+    width: auto;
+    min-width: 90px;
+    padding: 8px 18px;
+    font-size: 15px;
+    margin: 0;
+}
+
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.acciones form {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.form-adjunto {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.form-adjunto label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 8px;
+    margin-bottom: 0;
+}
+
+.form-adjunto input[type="file"] {
+    width: auto;
+    margin: 0;
+    border: none;
+}
+
+.form-adjunto button {
+    width: auto;
+    padding: 8px 18px;
+    margin: 0;
+}
+
+.subtareas,
+.comentarios {
+    margin-top: 10px;
+}
+
+.form-subtarea,
+.form-comentario {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.form-subtarea input,
+.form-comentario input {
+    flex: 1;
+    width: auto;
+    margin: 0;
+}
+
+.form-subtarea button,
+.form-comentario button {
+    width: auto;
+    padding: 8px 18px;
+    margin: 0;
+}
+
+.subtareas ul,
+.comentarios ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.subtareas li,
+.comentarios li {
+    margin-bottom: 6px;
+    font-size: 14px;
+    padding-left: 0;
+    border-left: none;
+}
+
+.subtareas li form,
+.comentarios li form {
+    display: inline;
+    margin-left: 8px;
+}
+
+.subtareas p,
+.comentarios p {
+    color: #636e72;
+    font-style: italic;
+    margin: 8px 0;
+}
+
+/* Mostrar tareas */
+.mostrar_tareas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 20px;
+    max-width: none;
+    
+}
 
 .mostrar_tareas tr td {
     padding: 10px;
@@ -64,10 +224,10 @@ button:hover {
 
 .mostrar_tareas li {
     padding: 5px 0;
-    border-left: 3px solid #0984e3;
     margin: 5px 0;
-    padding-left: 10px;
     font-size: 14px;
+    border-left: none;
+    padding-left: 0;
 }
 
 .mostrar_tareas li form {
@@ -78,14 +238,17 @@ button:hover {
     color: #636e72;
 }
 
-
+/* Crear tareas */
 .crearTareas {
-    max-width: 600px;
-    margin: 40px auto;
+    max-width: 1000px;
+    margin: 32px auto;
     background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 24px 40px;
+    border-radius: 16px;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 .crearTareas h2 {
@@ -109,6 +272,7 @@ button:hover {
     border: 1px solid #dcdde1;
     border-radius: 6px;
     margin-bottom: 15px;
+    box-sizing: border-box;
 }
 
 .crearTareas button {
@@ -123,6 +287,7 @@ button:hover {
     margin-top: 15px;
     display: flex;
     justify-content: space-between;
+    gap: 16px;
 }
 
 .crearTareas .links a {
@@ -136,8 +301,149 @@ button:hover {
     color: #74b9ff;
 }
 
-
 form input[type="file"] {
     border: none;
     margin: 10px 0;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: #2c3e50;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.logo h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #ecf0f1;
+}
+
+.nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav .vinculos {
+    text-decoration: none;
+    color: #ecf0f1;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav .vinculos:hover {
+    color: #1abc9c;
+}
+
+.btn-salir {
+    text-decoration: none;
+    background: #e74c3c;
+    padding: 6px 12px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.btn-salir:hover {
+    background: #c0392b;
+    color: #fff !important;
+    transition: all .5s;
+}
+
+.btn-login {
+    color: #fff;
+    text-decoration: none;
+    background: #0984e3;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+.btn-login:hover {
+    background: #fff;
+    color: #0984e3 !important;
+    transition: all .5s;
+}
+
+.btn-register {
+    text-decoration: none;
+    color: #0984e3;
+    background: #ffffff;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+.btn-register:hover {
+    background: #0984e3;
+    color: #fff !important;
+    transition: all .5s;
+}
+
+/* Footer */
+.container-footer{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.footer{
+    width: 100%;
+    background-color: #2c3e50;
+    padding: 80px 0;
+}
+.footer-row{
+    display: flex;
+}
+.footer-links{
+    width: 25%;
+    padding: 0 15px;
+}
+.footer-links h4{
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 25px;
+    font-weight: 500;
+    border-bottom: 2px solid #0984e3;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+.footer-links ul li a{
+    font-size: 18px;
+    text-decoration: none;
+    color: #BBBBBB;
+    display: block;
+    margin-bottom: 15px;
+    transition: all .3s ease;
+}
+.footer-links ul li a:hover{
+    color: white;
+    padding-left: 6px;
+}
+.social-link a{
+    display: inline-block;
+    min-height: 40px;
+    width: 40px;
+    background-color: rgba(255,255,255,0.2);
+    margin: 0 10px 10px 0;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    color: white;
+    transition: all .5s ease;
+}
+.social-link a:hover{
+    background-color: #0984e3;
+}
+.footer-links h4 span{
+    color: #0984e3;
+}
+@media(max-width:991px){
+    .footer-row{
+        text-align: center;
+    }
+    .footer-links{
+        width: 100%;
+        margin-bottom: 30px;
+    }
 }
