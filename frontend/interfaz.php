@@ -25,7 +25,7 @@ $rol = $_SESSION['rol'] ?? 'usuario';
 <?php 
 if (isset($_GET['query'])) { 
     $busqueda = $conexion->real_escape_string($_GET['query']); 
-    echo "<h2>Opciones:</h2>"; 
+    echo "<h2 class='Opciones'>Opciones</h2>"; 
     $opciones = []; 
 
     //Usuarios
@@ -62,7 +62,7 @@ if (isset($_GET['query'])) {
     } 
 
     if (count($opciones) > 0) { 
-        echo '<form method="GET">'; 
+        echo '<form method="GET" class="form-opciones-busqueda">'; 
         echo '<input type="hidden" name="query" value="'.$busqueda.'">'; 
         echo '<select name="seleccion">'; 
         foreach ($opciones as $op) { 
@@ -70,6 +70,7 @@ if (isset($_GET['query'])) {
         } 
         echo '</select>'; 
         echo '<button type="submit">Ver detalles</button>'; 
+        echo '<button type="button" id="btn-ocultar-detalles" onclick="ocultarDetalles()">Ocultar detalles</button>';
         echo '</form>'; 
     } else { 
         echo "<p>No se encontraron resultados.</p>"; 
@@ -77,6 +78,7 @@ if (isset($_GET['query'])) {
 
     //Mostrar detalles
     if (isset($_GET['seleccion'])) { 
+        echo '<div id="detalles-bloque">';
         $valor = explode("-", $_GET['seleccion']); 
         $tipo = $valor[0]; 
         $id = intval($valor[1]); 
@@ -103,7 +105,7 @@ if (isset($_GET['query'])) {
                         } 
                         echo "</ul>"; 
                     } else { 
-                        echo "<p><i>No tienes ningún proyecto asignado.</i></p>"; 
+                        echo "<p><i>No tiene ningún proyecto asignado.</i></p>"; 
                     } 
 
                     //Tareas del usuario
@@ -117,12 +119,13 @@ if (isset($_GET['query'])) {
                         } 
                         echo "</ul>"; 
                     } else { 
-                        echo "<p><i>No tienes ninguna tarea asignada.</i></p>"; 
+                        echo "<p><i>No tiene ninguna tarea asignada.</i></p>"; 
                     } 
                 } 
             } else { 
-                echo "<p>No tienes permisos para ver este usuario.</p>"; 
+                echo "<p>No tienes permiso para ver este usuario.</p>"; 
             } 
+            echo '</div>';
         } 
 
         //Proyecto
@@ -156,7 +159,7 @@ if (isset($_GET['query'])) {
                     echo "<p><i>Este proyecto aún no tiene tareas</i></p>"; 
                 } 
             } else { 
-                echo "<p>No tienes permisos para ver este proyecto.</p>"; 
+                echo "<p>No tiene permisos para ver este proyecto.</p>"; 
             } 
         } 
 
@@ -207,7 +210,7 @@ if (isset($_GET['query'])) {
 </div> 
 
 
-    <h1>Mis Tareas</h1>
+    <h1 class="misTareas">Mis tareas</h1>
     <div class="mostrar_tareas">
         
 <?php
@@ -222,11 +225,12 @@ if ($idUsuario) {
 }
 ?>
       
-        <?php
-$sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
-$resultado = mysqli_query($conexion, $sql); 
+<?php
 
+
+$resultado = mysqli_query($conexion, $sql); 
 if ($resultado ->num_rows > 0) { 
+    $sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
     $visto = []; 
     while ($row = $resultado -> fetch_assoc()) { 
         if(in_array($row["titulo"], $visto)){ continue; } 
@@ -323,9 +327,9 @@ if ($resultado ->num_rows > 0) {
 
         <h1>tareas asignadas</h1>
         <?php
-            $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
-            $resultado = mysqli_query($conexion, $sql);
+        $resultado = mysqli_query($conexion, $sql);
                 if ($resultado ->num_rows > 0) {
+                    $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
                     echo "<table ='1'>";
                     $visto = [];
                         while ($row = $resultado -> fetch_assoc()) {
@@ -380,73 +384,72 @@ if ($resultado ->num_rows > 0) {
             <option value="baja">baja</option>
         </select>
 
-        <label for="">estado</label>
-        <select name="estado" id="">
-            <option value="completada">completada</option>
-            <option value="enProceso">en proceso</option>
-        </select>
-        
-        <?php
+<label for="">estado</label>
+<select name="estado" id="">
+    <option value="completada">completada</option>
+    <option value="enProceso">en proceso</option>
+</select>
 
-            $sqla = "SELECT * FROM usuarios WHERE id = " . $_SESSION['id'];
-            $resultadoo = mysqli_query($conexion, $sqla);
-            $roww = $resultadoo -> fetch_assoc();
-            if ($roww["rol"] == "admin") {
-                
-                echo '<label for="">asignar</label>';
-                echo '<select name="asignar-usuario" id="">';
-                    echo '<option value="">asignar usuario</option>';
-                    
-                
-                    $sql = "select * from todopro.usuarios";
-                    $resultado = mysqli_query($conexion, $sql);
-                    if ($resultado ->num_rows > 0) {
-                        while ($row = $resultado -> fetch_assoc()) {
-                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
-                        }
-                    }
-                echo '</select>';
+<?php
+if (isset($_SESSION['id'])) {
+    $idUsuario = $_SESSION['id'];
+    $sql_rol = "SELECT rol FROM usuarios WHERE id = $idUsuario";
+    $resultado_rol = mysqli_query($conexion, $sql_rol);
+    $fila_rol = mysqli_fetch_assoc($resultado_rol);
 
-                echo '<label for="">proyecto</label>';
-                echo '<select name="asignar-proyecto" id="">';
-                    echo '<option value="">asignar proyecto</option>';
-                    
-                
-                    $sql = "select * from todopro.proyectos";
-                    $resultado = mysqli_query($conexion, $sql);
-                    if ($resultado ->num_rows > 0) {
-                        while ($row = $resultado -> fetch_assoc()) {
-                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
-                        }
-                    }
-                echo '</select>';
-            }
+    if ($fila_rol["rol"] == "admin") {
+        echo '<label for="">asignar</label>';
+        echo '<select name="asignar-usuario" id="">';
+        echo '<option value="">asignar usuario</option>';
 
-        ?>
-        <label for="">etiquetas</label>
-        <select name="etiqueta" id="">
-            <option value="">etiquetar</option>
-            <?php
-                $sql = "select * from todopro.etiquetas";
-                $resultado = mysqli_query($conexion, $sql);
+        // Consulta para obtener todos los usuarios
+        $sql_usuarios = "SELECT id, nombre FROM usuarios";
+        $res_usuarios = mysqli_query($conexion, $sql_usuarios);
+        while ($row = mysqli_fetch_assoc($res_usuarios)) {
+            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+        }
+        echo '</select>';
 
-                if ($resultado ->num_rows > 0) {
-                    while ($row = $resultado -> fetch_assoc()) {
-                        echo "<option value='" . $row["nombre"] . "'>" . $row["nombre"] . "</option>";
-                    }
-                }
-            ?>
-        </select>
-        
-        <button type="submit">Agregar</button>
-        <div class="links">
-            <a href="proyectos.php">Crear nuevo proyecto</a>
-            <a href="etiquetas.php">Crear etiqueta</a>
-        </div>
-    </form>
-    </div>
+        echo '<label for="">proyecto</label>';
+        echo '<select name="asignar-proyecto" id="">';
+        echo '<option value="">asignar proyecto</option>';
+
+        // Consulta para obtener todos los proyectos
+        $sql_proyectos = "SELECT id, nombre FROM proyectos";
+        $res_proyectos = mysqli_query($conexion, $sql_proyectos);
+        while ($row = mysqli_fetch_assoc($res_proyectos)) {
+            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+        }
+        echo '</select>';
+    }
+}
+?>
+
+<label for="">etiquetas</label>
+<select name="etiqueta" id="">
+    <option value="">etiquetar</option>
+    <?php
+    $sql_etiquetas = "select * from todopro.etiquetas";
+    $res_etiquetas = mysqli_query($conexion, $sql_etiquetas);
+
+    if (mysqli_num_rows($res_etiquetas) > 0) {
+        while ($row = mysqli_fetch_assoc($res_etiquetas)) {
+            echo "<option value='" . $row["nombre"] . "'>" . $row["nombre"] . "</option>";
+        }
+    }
+    ?>
+</select>
+
+<button type="submit">Agregar</button>
+<div class="links">
+    <a href="proyectos.php">Crear nuevo proyecto</a>
+    <a href="etiquetas.php">Crear etiqueta</a>
+</div>
+</form>
+</div>
 
     <?php include("includes/footer.php");?>
+    <script src="script.js"></script>
    
 </body>
 </html>
