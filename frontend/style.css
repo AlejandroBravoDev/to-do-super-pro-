@@ -901,3 +901,76 @@ h1 {
     font-size: 14px;
 
 }
+/*Perfil usuario o admin*/
+ .perfil{ 
+    max-width: 1000px; 
+    margin: 50px auto; 
+    padding: 20px;
+    background: #f4f4f4; 
+    border-radius: 8px; 
+}
+.perfil form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+.avatar-container{
+    width: 30%;
+    height: auto;
+   
+    
+}
+.datos-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    width: 60%;
+    height: 500px;
+}
+.perfil img{ 
+    display:block; 
+    margin-bottom: 15px; 
+    border-radius: 50%; 
+    width: 250px; 
+    height: 250px; 
+    object-fit: cover; 
+}
+.perfil label{ 
+    display:block; 
+    margin-top: 10px;
+    font-weight: bold; 
+}
+.perfil input{ 
+    width: 100%; 
+    padding: 6px; 
+    margin-top: 4px;
+}
+.btn{ 
+    margin-top: 15px; 
+    padding: 8px 15px; 
+    border: none; cursor: pointer; 
+    border-radius: 5px; 
+}
+.btn-editar{ 
+    width: 20%;
+    background: #0984e3; 
+    color: white; 
+}
+.btn-editar:hover{
+    background-color: white;
+    color: #0984e3;
+    border: 1px solid #0984e3;
+}
+.btn-guardar{ 
+    width: 25%;
+    background-color: #0984e3;
+    color: white; 
+    display:none; 
+}
+.btn-guardar:hover{
+    background-color: white;
+    color: #0984e3;
+    border: 1px solid #0984e3;
+}

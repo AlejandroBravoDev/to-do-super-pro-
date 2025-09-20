@@ -30,6 +30,7 @@
             <div class="links">
                 <a href="../index.php">Inicie sesion</a>
             </div>
+            <h4 class="mensaje"><?php echo $mensaje ?></h4>
         </form>
     </aside>
 </body>
