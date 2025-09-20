@@ -1,7 +1,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #74b9ff;
+    background: #0067ce;
     margin: 0;
     padding: 0;
     color: #333;
@@ -901,76 +901,66 @@ h1 {
     font-size: 14px;
 
 }
-/*Perfil usuario o admin*/
- .perfil{ 
-    max-width: 1000px; 
-    margin: 50px auto; 
-    padding: 20px;
-    background: #f4f4f4; 
-    border-radius: 8px; 
+
+.links_interfaz{
+    margin-left: 60px;
 }
-.perfil form{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
+
+.links_proyectos{
+    margin-left: 20px;
 }
-.avatar-container{
-    width: 30%;
-    height: auto;
-   
-    
+
+.links_editar_tarea{
+    margin-left: 100px;
 }
-.datos-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
-    width: 60%;
-    height: 500px;
+
+/*estilos para el recuperar contraseña*/
+.contenedor-recuperar {
+    background: #fff;
+    max-width: 500px;
+    margin: 60px auto;
+    border-radius: 18px;
+    padding: 40px 30px 30px 30px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    text-align: center;
 }
-.perfil img{ 
-    display:block; 
-    margin-bottom: 15px; 
-    border-radius: 50%; 
-    width: 250px; 
-    height: 250px; 
-    object-fit: cover; 
+.contenedor-recuperar h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
 }
-.perfil label{ 
-    display:block; 
-    margin-top: 10px;
-    font-weight: bold; 
+.contenedor-recuperar label {
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 10px;
+    margin-left: 35px;
+    text-align: left;
 }
-.perfil input{ 
-    width: 100%; 
-    padding: 6px; 
-    margin-top: 4px;
+.contenedor-recuperar input[type="email"] {
+    width: 80%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border 0.2s;
 }
-.btn{ 
-    margin-top: 15px; 
-    padding: 8px 15px; 
-    border: none; cursor: pointer; 
-    border-radius: 5px; 
+.contenedor-recuperar input[type="email"]:focus {
+    border: 1.5px solid #0070d8;
 }
-.btn-editar{ 
-    width: 20%;
-    background: #0984e3; 
-    color: white; 
+.contenedor-recuperar button {
+    background: #0070d8;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
 }
-.btn-editar:hover{
-    background-color: white;
-    color: #0984e3;
-    border: 1px solid #0984e3;
+.contenedor-recuperar button:hover {
+    background: #005bb5;
 }
-.btn-guardar{ 
-    width: 25%;
-    background-color: #0984e3;
-    color: white; 
-    display:none; 
-}
-.btn-guardar:hover{
-    background-color: white;
-    color: #0984e3;
-    border: 1px solid #0984e3;
-}
+
+/**/

@@ -20,7 +20,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Editar Tarea</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
@@ -49,41 +49,46 @@
             <option value="completada">completada</option>
             <option value="enProceso">en proceso</option>
         </select>
-        <label for="">asignar</label>
-        <select name="asignar-usuario" id="">
-            <option value="<?= $tarea['nombre_asignado']?>"><?= $tarea['nombre_asignado']?></option>
-            <?php
-                $sql = "SELECT * FROM todopro.usuarios";
-                $resultado = mysqli_query($conexion, $sql);
+        <?php
+                if (isset($_SESSION['id'])) {
+                    $idUsuario = $_SESSION['id'];
+                    $sql_rol = "SELECT rol FROM usuarios WHERE id = $idUsuario";
+                    $resultado_rol = mysqli_query($conexion, $sql_rol);
+                    $fila_rol = mysqli_fetch_assoc($resultado_rol);
 
-                if($resultado->num_rows > 0){
-                    while($row = $resultado->fetch_assoc()){
-                        echo "<option value='".$row['nombre']."'>".$row['nombre']."</option>";
+                    if ($fila_rol["rol"] == "admin") {
+                        echo '<label for="">asignar</label>';
+                        echo '<select name="asignar-usuario" id="">';
+                        echo '<option value="">asignar usuario</option>';
+
+                        // Consulta para obtener todos los usuarios
+                        $sql_usuarios = "SELECT id, nombre FROM usuarios";
+                        $res_usuarios = mysqli_query($conexion, $sql_usuarios);
+                        while ($row = mysqli_fetch_assoc($res_usuarios)) {
+                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                        }
+                        echo '</select>';
+
+                        echo '<label for="">proyecto</label>';
+                        echo '<select name="asignar-proyecto" id="">';
+                        echo '<option value="">asignar proyecto</option>';
+
+                        // Consulta para obtener todos los proyectos
+                        $sql_proyectos = "SELECT id, nombre FROM proyectos";
+                        $res_proyectos = mysqli_query($conexion, $sql_proyectos);
+                        while ($row = mysqli_fetch_assoc($res_proyectos)) {
+                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                        }
+                        echo '</select>';
                     }
                 }
             ?>
-
-        </select>
-        <!-- select de usuarios -->
-
-        <label for="">proyecto</label>
-        <select name="asignar-proyecto" id="">
-            <option value="">asignar proyecto</option>
-            <?php
-            $sql = "select * from todopro.proyectos";
-            $resultado = mysqli_query($conexion, $sql);
-
-            if ($resultado ->num_rows > 0) {
-                while ($row = $resultado -> fetch_assoc()) {
-                    echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
-                }
-            }
-            ?>
-        </select>
         <!--Select para proyectos-->
 
         <button type="submit">Editar</button>
-        <a href="interfaz.php">Volver a inicio</a>
+        <div class="links links_editar_tarea">
+            <a href="interfaz.php">Volver a inicio</a>
+        </div>
 
 
     </form>

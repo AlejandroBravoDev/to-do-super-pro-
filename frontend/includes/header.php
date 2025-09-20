@@ -1,9 +1,20 @@
 <header class="header">
     <div class="logo">
-        <h2>To-Do Super Pro</h2>
+        <h2>To Do <span style="color:#0984e3;">Super Pro</span></h2>
     </div>
     <nav class="nav">
         <ul>
+            <?php
+                $sql = "SELECT * FROM usuarios WHERE id = ?";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bind_param("i", $_SESSION["id"]);
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+                $usuario = $resultado->fetch_assoc();
+                if ($usuario && $usuario["rol"] === "admin") {
+                    echo '<li><a href="../frontend/interfazAdmin.php" class="vinculos">Administrar Usuarios</a></li>';
+                }
+            ?>
             <li><a href="interfaz.php" class="vinculos">Inicio</a></li>
             <li><a href="proyectos.php" class="vinculos">Proyectos</a></li>
             <li><a href="perfil.php" class="vinculos">Mi Perfil</a></li>

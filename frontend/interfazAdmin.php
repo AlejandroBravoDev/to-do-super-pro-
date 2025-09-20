@@ -8,43 +8,51 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Administrar Usuarios</title>
+    <link rel="stylesheet" href="../frontend/style.css">
 </head>
 <body>
-    <h1>Administrar usuarios</h1>
+    <div class="usuarios_container">
+        <h1>Administrar usuarios</h1>
 
-    <?php
-        $sql = "SELECT * FROM usuarios";
-        $resultado = mysqli_query($conexion, $sql);
+        <?php
+            $sql = "SELECT * FROM usuarios";
+            $resultado = mysqli_query($conexion, $sql);
 
-        if($resultado -> num_rows > 0){
-            echo "<table ='1'>";
-            while($row = $resultado -> fetch_assoc()){
-                    echo "<tr>";
-                    echo "<td>".$row['id']."</td>";
-                    echo "<td>".$row['nombre']."</td>";
-                    echo "<td>".$row['correo']."</td>";
-                    echo "<td>".$row['rol']."</td>";
-                    echo "<td>
-                            <form action='../frontend/editarUsuario.php' method='POST' >
-                                <input type='hidden' name='id' value='" .$row['id']."'>
-                                <button type='submit'>Editar</button>
-                            </form>
-                           <td>";
-                    echo "<td>
-                            <form action='../backend/eliminarUsuario.php' method='POST' onsubmit='return confirmar()'>
-                                <input type='hidden' name='id' value='".$row['id']."'>
-                                <button type='submit'>Eliminar</button>
-                            </form>
-                           <td>";
-                    echo "</tr>";
+            if($resultado -> num_rows > 0){
+                echo "<table border='1' class='tabla_usuarios'>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Rol</th>
+                            <th colspan='2'>Acciones</th>
+                        </tr>";
+                while($row = $resultado -> fetch_assoc()){
+                        echo "<tr>";
+                        echo "<td>".$row['id']."</td>";
+                        echo "<td>".$row['nombre']."</td>";
+                        echo "<td>".$row['correo']."</td>";
+                        echo "<td>".$row['rol']."</td>";
+                        echo "<td>
+                                <form action='../frontend/editarUsuario.php' method='POST' >
+                                    <input type='hidden' name='id' value='" .$row['id']."'>
+                                    <button type='submit'>Editar</button>
+                                </form>
+                            <td>";
+                        echo "<td>
+                                <form action='../backend/eliminarUsuario.php' method='POST' onsubmit='return confirmar()'>
+                                    <input type='hidden' name='id' value='".$row['id']."'>
+                                    <button type='submit'>Eliminar</button>
+                                </form>
+                            <td>";
+                        echo "</tr>";
 
+                }
+                echo "</table>";
             }
-            echo "</table>";
-        }
-    ?>
-
-    <?=$_SESSION["mensajeAdmin"]?>
+        ?>
+    </div>
     <script>
         function confirmar(){
             return confirm("¿estpas seguro de eliminar este usuario?")

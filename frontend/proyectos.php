@@ -13,7 +13,7 @@ require_once '../backend/crearProyectos.php';
 </head>
 <body>
     <?php include("includes/header.php");?>
-    <div class="contenedor-form-proyecto">
+    <div class="contenedor-form-proyecto" style="margin-top: 50px; text">
     <form method="POST" class="form-proyecto">
         <h1>Registrar Proyecto</h1>
 
@@ -27,7 +27,7 @@ require_once '../backend/crearProyectos.php';
         <input type="number" name="id_propietario" id="id_propietario" required>
 
         <button type="submit">Guardar Proyecto</button>
-        <div class="links">
+        <div class="links links_proyectos">
             <a href="visualizarProyectos.php">Ver proyectos</a>
             <a href="interfaz.php">Volver a inicio</a>
         </div>
