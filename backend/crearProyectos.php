@@ -32,8 +32,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error al crear el proyecto: " . $stmt->error;
     }
-
-    $stmt->close();
-    $conexion->close();
 }
 ?>

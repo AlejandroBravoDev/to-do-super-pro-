@@ -6,7 +6,7 @@
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-
+    $mensaje = "";
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         $correo = $_POST['correo'];
 
@@ -44,7 +44,9 @@
                 $email->Subject = 'Recuperar Contraseña';
                 $email->Body = "Haz clic en el siguiente enlace para restablecer tu contraseña: <a href='$enlace'>$enlace</a>. Este enlace expirará en 1 hora.";
                 $email->send();
-                echo "Correo enviado exitosamente.";
+                $mensaje = "Revisa tu correo.";
+
+               
             } catch (Exception $e) {
                 echo "Error al enviar el correo: {$email->ErrorInfo}";
             }

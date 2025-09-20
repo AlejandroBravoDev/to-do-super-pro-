@@ -12,7 +12,7 @@ $rol = $_SESSION['rol'] ?? 'usuario';
 <head> 
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Document</title> 
+    <title>Inicio</title> 
     <link rel="stylesheet" href="../frontend/style.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
@@ -227,10 +227,9 @@ if ($idUsuario) {
       
 <?php
 
-
+$sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
 $resultado = mysqli_query($conexion, $sql); 
 if ($resultado ->num_rows > 0) { 
-    $sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
     $visto = []; 
     while ($row = $resultado -> fetch_assoc()) { 
         if(in_array($row["titulo"], $visto)){ continue; } 
@@ -320,16 +319,16 @@ if ($resultado ->num_rows > 0) {
         echo '</div>';
     } 
 }  else { 
-    echo "<p><i>No tienes ninguna tarea asignada.</i></p>"; 
+    echo "<p><i>No tienes ninguna tarea Creada.</i></p>"; 
 } 
 ?> 
 </div>
 
         <h1>tareas asignadas</h1>
         <?php
-        $resultado = mysqli_query($conexion, $sql);
+            $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
+            $resultado = mysqli_query($conexion, $sql);
                 if ($resultado ->num_rows > 0) {
-                    $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
                     echo "<table ='1'>";
                     $visto = [];
                         while ($row = $resultado -> fetch_assoc()) {
@@ -361,92 +360,94 @@ if ($resultado ->num_rows > 0) {
                     echo "</td></tr>";
                     echo "</table>";
                     
+                }else{
+                    $mensaje = "No tienes tareas asignadas";
                 }
             
+                    echo "<p style='text-align:center;'>$mensaje</p>"; 
 
         ?>
     </div>
 
 
 
-    
-    <form method="post" class="crearTareas" action="../backend/action-crear-tarea.php">
-        <h1>Crea tu tarea</h1>
-        <label for="">Nombre</label>
-        <input type="text" name="titulo" placeholder="tarea">
-        <label for="">fecha de vencimineto</label>
-        <input type="date" name="fecha-vencimiento">
-        <label for="">prioridad</label>
-        <select name="prioridad" id="">
-            <option value="">prioridad</option>
-            <option value="alta">alta</option>
-            <option value="media">media</option>
-            <option value="baja">baja</option>
-        </select>
+        
+        <form method="post" class="crearTareas" action="../backend/action-crear-tarea.php">
+            <h1>Crea tu tarea</h1>
+            <label for="">Nombre</label>
+            <input type="text" name="titulo" placeholder="tarea">
+            <label for="">fecha de vencimineto</label>
+            <input type="date" name="fecha-vencimiento">
+            <label for="">prioridad</label>
+            <select name="prioridad" id="">
+                <option value="">prioridad</option>
+                <option value="alta">alta</option>
+                <option value="media">media</option>
+                <option value="baja">baja</option>
+            </select>
 
-<label for="">estado</label>
-<select name="estado" id="">
-    <option value="completada">completada</option>
-    <option value="enProceso">en proceso</option>
-</select>
+            <label for="">estado</label>
+            <select name="estado" id="">
+                <option value="completada">completada</option>
+                <option value="enProceso">en proceso</option>
+            </select>
 
-<?php
-if (isset($_SESSION['id'])) {
-    $idUsuario = $_SESSION['id'];
-    $sql_rol = "SELECT rol FROM usuarios WHERE id = $idUsuario";
-    $resultado_rol = mysqli_query($conexion, $sql_rol);
-    $fila_rol = mysqli_fetch_assoc($resultado_rol);
+            <?php
+                if (isset($_SESSION['id'])) {
+                    $idUsuario = $_SESSION['id'];
+                    $sql_rol = "SELECT rol FROM usuarios WHERE id = $idUsuario";
+                    $resultado_rol = mysqli_query($conexion, $sql_rol);
+                    $fila_rol = mysqli_fetch_assoc($resultado_rol);
 
-    if ($fila_rol["rol"] == "admin") {
-        echo '<label for="">asignar</label>';
-        echo '<select name="asignar-usuario" id="">';
-        echo '<option value="">asignar usuario</option>';
+                    if ($fila_rol["rol"] == "admin") {
+                        echo '<label for="">asignar</label>';
+                        echo '<select name="asignar-usuario" id="">';
+                        echo '<option value="">asignar usuario</option>';
 
-        // Consulta para obtener todos los usuarios
-        $sql_usuarios = "SELECT id, nombre FROM usuarios";
-        $res_usuarios = mysqli_query($conexion, $sql_usuarios);
-        while ($row = mysqli_fetch_assoc($res_usuarios)) {
-            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
-        }
-        echo '</select>';
+                        // Consulta para obtener todos los usuarios
+                        $sql_usuarios = "SELECT id, nombre FROM usuarios";
+                        $res_usuarios = mysqli_query($conexion, $sql_usuarios);
+                        while ($row = mysqli_fetch_assoc($res_usuarios)) {
+                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                        }
+                        echo '</select>';
 
-        echo '<label for="">proyecto</label>';
-        echo '<select name="asignar-proyecto" id="">';
-        echo '<option value="">asignar proyecto</option>';
+                        echo '<label for="">proyecto</label>';
+                        echo '<select name="asignar-proyecto" id="">';
+                        echo '<option value="">asignar proyecto</option>';
 
-        // Consulta para obtener todos los proyectos
-        $sql_proyectos = "SELECT id, nombre FROM proyectos";
-        $res_proyectos = mysqli_query($conexion, $sql_proyectos);
-        while ($row = mysqli_fetch_assoc($res_proyectos)) {
-            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
-        }
-        echo '</select>';
-    }
-}
-?>
+                        // Consulta para obtener todos los proyectos
+                        $sql_proyectos = "SELECT id, nombre FROM proyectos";
+                        $res_proyectos = mysqli_query($conexion, $sql_proyectos);
+                        while ($row = mysqli_fetch_assoc($res_proyectos)) {
+                            echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                        }
+                        echo '</select>';
+                    }
+                }
+            ?>
 
-<label for="">etiquetas</label>
-<select name="etiqueta" id="">
-    <option value="">etiquetar</option>
-    <?php
-    $sql_etiquetas = "select * from todopro.etiquetas";
-    $res_etiquetas = mysqli_query($conexion, $sql_etiquetas);
+            <label for="">etiquetas</label>
+            <select name="etiqueta" id="">
+                <option value="">etiquetar</option>
+                <?php
+                    $sql_etiquetas = "select * from todopro.etiquetas";
+                    $res_etiquetas = mysqli_query($conexion, $sql_etiquetas);
 
-    if (mysqli_num_rows($res_etiquetas) > 0) {
-        while ($row = mysqli_fetch_assoc($res_etiquetas)) {
-            echo "<option value='" . $row["nombre"] . "'>" . $row["nombre"] . "</option>";
-        }
-    }
-    ?>
-</select>
+                    if (mysqli_num_rows($res_etiquetas) > 0) {
+                        while ($row = mysqli_fetch_assoc($res_etiquetas)) {
+                            echo "<option value='" . $row["nombre"] . "'>" . $row["nombre"] . "</option>";
+                        }
+                    }
+                ?>
+            </select>
 
-<button type="submit">Agregar</button>
-<div class="links">
-    <a href="proyectos.php">Crear nuevo proyecto</a>
-    <a href="etiquetas.php">Crear etiqueta</a>
-</div>
-</form>
-</div>
+            <button type="submit">Agregar</button>
+            <div class="links links_interfaz">
+                <a href="proyectos.php">Crear nuevo proyecto</a>
+                <a href="etiquetas.php">Crear etiqueta</a>
+            </div>
+        </form>
 
     <?php include("includes/footer.php");?>
     <script src="script.js"></script>

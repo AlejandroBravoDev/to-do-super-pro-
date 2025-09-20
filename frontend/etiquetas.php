@@ -54,6 +54,7 @@ require_once "../backend/conexion.php";
     <title>Etiquetas</title>
 </head>
 <body >
+    <?php include("includes/header.php");?>
     <div class="container_etiquetas">
         <h1>Crear Etiquetas</h1>
         <form action="" method="post" class="form_crear_etiqueta">
@@ -86,5 +87,7 @@ require_once "../backend/conexion.php";
             
         </div>
     </div>
+    
+    <?php include("includes/footer.php");?>
 </body>
 </html>
