@@ -238,6 +238,7 @@ if ($resultado ->num_rows > 0) {
         echo '<div class="tarea-header">';
         echo '<div class="tarea-info">';
         echo "<b>" . htmlspecialchars($row["titulo"]) . "</b> | Estado: " . htmlspecialchars($row["estado"]) . " | Prioridad: " . htmlspecialchars($row["prioridad"]) . " | Vence: " . htmlspecialchars($row["fecha_vencimiento"]);
+        echo "<p>Descripcion: <span class='descripcion'>" . htmlspecialchars($row["descripcion"]). "</span></p>";
         echo "</div>";
         echo '<div class="acciones">';
         echo "<form method='post' action='../backend/action-eliminar-tarea.php'> 
@@ -324,10 +325,11 @@ if ($resultado ->num_rows > 0) {
 ?> 
 </div>
 
-        <h1>tareas asignadas</h1>
+        <h1>Tareas asignadas</h1>
         <?php
             $sql = "SELECT * FROM tareas WHERE id_asignado = " . $_SESSION['id'];
             $resultado = mysqli_query($conexion, $sql);
+            $mensaje = "";
                 if ($resultado ->num_rows > 0) {
                     echo "<table ='1'>";
                     $visto = [];
@@ -364,20 +366,33 @@ if ($resultado ->num_rows > 0) {
                     $mensaje = "No tienes tareas asignadas";
                 }
             
-                    echo "<p style='text-align:center;'>$mensaje</p>"; 
+                echo "<p style='text-align:center;'>$mensaje</p>"; 
 
         ?>
     </div>
 
 
 
-        
         <form method="post" class="crearTareas" action="../backend/action-crear-tarea.php">
             <h1>Crea tu tarea</h1>
+            <?php
+            if (isset($_SESSION["mensaje_campos_obligatorios"])) {
+                echo "<p style='font-weight: bold;'>" . $_SESSION["mensaje_campos_obligatorios"] . "</p>";
+                unset($_SESSION["mensaje_campos_obligatorios"]);
+            }
+            ?>
             <label for="">Nombre</label>
             <input type="text" name="titulo" placeholder="tarea">
+            <label for="">Descripcion</label>
+            <textarea name="descripcion" placeholder="Añade una descripcion"></textarea>
             <label for="">fecha de vencimineto</label>
             <input type="date" name="fecha-vencimiento">
+            <?php
+            if (isset($_SESSION["mensaje_tarea"])) {
+                echo "<p style='font-weight: bold;'>" . $_SESSION["mensaje_tarea"] . "</p>";
+                unset($_SESSION["mensaje_tarea"]);
+            }
+            ?>
             <label for="">prioridad</label>
             <select name="prioridad" id="">
                 <option value="">prioridad</option>
@@ -391,6 +406,7 @@ if ($resultado ->num_rows > 0) {
                 <option value="completada">completada</option>
                 <option value="enProceso">en proceso</option>
             </select>
+        
 
             <?php
                 if (isset($_SESSION['id'])) {
