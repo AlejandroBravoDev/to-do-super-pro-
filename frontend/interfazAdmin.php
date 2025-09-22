@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="../frontend/style.css">
 </head>
 <body>
+    <?php
+        include '../frontend/includes/header.php';
+    ?>
     <div class="usuarios_container">
         <h1>Administrar usuarios</h1>
 
@@ -20,7 +23,7 @@
             $resultado = mysqli_query($conexion, $sql);
 
             if($resultado -> num_rows > 0){
-                echo "<table border='1' class='tabla_usuarios'>
+                echo "<table ' class='tabla_usuarios'>
                         <tr>
                             <th>ID</th>
                             <th>Nombre</th>
@@ -57,6 +60,10 @@
         function confirmar(){
             return confirm("¿estpas seguro de eliminar este usuario?")
         }
-    </script>
+    </script>   
+
+    <?php
+        include '../frontend/includes/footer.php';
+    ?>
 </body>
 </html>

@@ -4,40 +4,32 @@ require_once "../backend/conexion.php";
     if(isset($_POST["id_etiqueta"])){
         $id_etiqueta = $_POST["id_etiqueta"];
 
-        $sql = "select * from etiquetas where id = '$id_etiqueta'";
+        $sql = "SELECT * FROM etiquetas WHERE id = ?";
         $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("i", $id_etiqueta);
         $stmt->execute();
         $resultado = $stmt->get_result();
         $row = $resultado->fetch_assoc();
     }
     $mensaje = "";
+    $error = "";
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $id_usuario = $_SESSION['id'];
-        $etiqueta = $_POST['etiqueta'];
+        $etiqueta = isset($_POST['etiqueta']) ? $_POST['etiqueta'] : "";
+        $color = isset($_POST['color']) ? $_POST['color'] : "";
 
         if(empty($etiqueta)){
             $error = "no se puede crear la etiqueta sin un nombre";
         }
 
         if(empty($error)){
-            $sql = "INSERT INTO etiquetas (nombre, id_usuario) VALUES ('$etiqueta', $id_usuario)";
-
+            $sql = "INSERT INTO etiquetas (nombre, id_usuario, color) VALUES (?, ?, ?)";
             $stmt = $conexion->prepare($sql);
+            $stmt -> bind_param("sis", $etiqueta, $id_usuario, $color);
             if ($stmt->execute()) {
                 $mensaje="etiqueta creada";
             } else {
                 $mensaje="error al crear la etiqueta";
-            }
-
-            if (isset($_POST['eliminar'])) {
-                $sql = "DELETE FROM etiquetas WHERE id_etiqueta = ?";
-                $stmt = $conexion->prepare($sql);
-                $stmt->bind_param("i", $id_etiqueta);
-                if ($stmt->execute()) {
-                    $mensaje="etiqueta eliminada";
-                } else {
-                    $mensaje="error al eliminar";
-                }
             }
         }
     }
@@ -60,6 +52,7 @@ require_once "../backend/conexion.php";
         <form action="" method="post" class="form_crear_etiqueta">
             <input type="hidden" name="id_etiqueta" value='<?=$_POST['id_etiqueta'];?>'>
             <input type="text" name="etiqueta" placeholder="crea tu etiqueta">
+            <input type="color" name="color" id="color" value="#ffffff">
             <button type="submit">crear</button>
 
             <?php
@@ -67,17 +60,26 @@ require_once "../backend/conexion.php";
                 
             ?>
             <?=$mensaje;?>
+            <?=$error;?>
         </form>
 
         <div class="mostrar_etiquetas">
             <h1>etiquetas creadas</h1>
             <div class="etiquetas">
                 <?php
-                    $sql = "SELECT nombre FROM etiquetas";
+                    $sql = "SELECT * FROM etiquetas";
                     $resultado = mysqli_query($conexion, $sql);
                     if ($resultado ->num_rows > 0) { 
                         while($row = $resultado->fetch_assoc()) {
-                            echo "<div class='etiqueta_individual'>".$row['nombre']."</div>";
+                            echo "<div class='etiquetas_boton'>";
+                                echo "<div class='etiqueta_individual' style='background-color: {$row['color']};'>".$row['nombre']."</div>";
+                                if($_SESSION['rol'] == 'admin'){
+                                    echo "<form action='../backend/eliminar_etiqueta.php' method='post' class='form_eliminar_etiqueta'>
+                                            <input type='hidden' name='id_etiqueta' value='{$row['id']}'>
+                                            <button type='submit' name='eliminar'>eliminar</button>
+                                        </form>";
+                                }
+                            echo "</div>";
                         }
                     } else {
                         echo "no hay etiquetas";
