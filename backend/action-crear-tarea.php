@@ -6,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id_usuario = $_SESSION["id"];
     $titulo_tarea = $_POST["titulo"] ?? null;
     $fecha = $_POST["fecha-vencimiento"] ?? null;
-    $descripcion = $_POST["descripcion"] ?? null;
     $estado = $_POST["estado"] ?? null;
     $prioridad = $_POST["prioridad"] ?? null;
     $id_asignado = $_POST["asignar-usuario"] ?? null;
@@ -15,19 +14,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     //Debe llenar todos los campos requeridos
     if (empty($titulo_tarea) || empty($estado) || empty($prioridad)) {
-        $_SESSION["mensaje_campos_obligatorios"] = "Llene todos los campos obligatorios!";
-        header("Location: ../frontend/interfaz.php");
-        exit;
-    }
-    //No permitira crear tareas con fechas anteriores
-    $fecha_actual = date("Y-m-d");
-    if ($fecha < $fecha_actual) {
-        $_SESSION["mensaje_tarea"] = "No puedes crear una tarea con una fecha anterior a hoy";
-        header("Location: ../frontend/interfaz.php");
-        exit;
+        die("Todos los campos obligatorios deben estar completos");
     }
 
-    //Vefirificamos el usuario 
+    // ============================
+    // 🧍 Verificar usuario asignado
+    // ============================
     $nombre_asignado = null;
     if (!empty($id_asignado)) {
         $stmt1 = $conexion->prepare("SELECT nombre FROM usuarios WHERE id = ?");
@@ -40,13 +32,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($usuario) {
             $nombre_asignado = $usuario["nombre"];
         } else {
-            $id_asignado = null;//Si no existe, es null
+            $id_asignado = null; // ⚡ muy importante
         }
     } else {
         $id_asignado = null;
     }
 
-    //Verificamos el proyecto
+    // ============================
+    // 📁 Verificar proyecto
+    // ============================
     $nombre_proyecto = null;
     if (!empty($id_proyecto)) {
         $stmt2 = $conexion->prepare("SELECT nombre FROM proyectos WHERE id = ?");
@@ -65,7 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $id_proyecto = null;
     }
 
-    //Insertamos la nueva tarea
+    // ============================
+    // ✅ Insertar en tareas
+    // ============================
     $sql = "INSERT INTO tareas (
         id_creador, titulo, descripcion, fecha_vencimiento, estado, prioridad,
         id_asignado, nombre_asignado, id_proyecto, nombre_proyecto, nombre_etiqueta
@@ -73,6 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conexion->prepare($sql);
+
+    // Convertir nulls explícitamente
     $stmt->bind_param(
         "isssssissis",
         $id_usuario,

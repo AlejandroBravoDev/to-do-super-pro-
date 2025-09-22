@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION["id"] = $usuario["id"];
                     $_SESSION["nombre"] = $usuario["nombre"];
                     $_SESSION["correo"] = $usuario["correo"];
-                    $_SESSION["rol"] = $usuario["rol"]; // Guardamos el rol aquí
+                    $_SESSION["rol"] = $usuario["rol"]; 
 
                     header("Location: frontend/interfaz.php");
                     exit;

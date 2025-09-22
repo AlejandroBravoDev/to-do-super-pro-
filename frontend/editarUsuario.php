@@ -21,24 +21,34 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Editar Usuario</title>
+    <link rel="stylesheet" href="../frontend/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
 <body>
-    <h1>Editar usuario</h1>
-    <form action="../backend/editarUsuario.php" method="post">
-        <input type="hidden" name="id" value="<?=$usuarios['id']?>">
+    <?php
+        include '../frontend/includes/header.php';
+    ?>
+    <div class="usuarios_container">
+        <h1>Editar usuario</h1>
+        <form action="../backend/editarUsuario.php" method="post">
+            <input type="hidden" name="id" value="<?=$usuarios['id']?>">
 
-        <label for="">nombre</label>
-        <input type="text" value="<?=$usuarios['nombre']?>" name="nombre">
-        <label for="">Correo</label>
-        <input type="text" value="<?=$usuarios['correo']?>" name="correo">
-        <label for="">rol</label>
-        <select name="roles" id="rol">
-            <option value="<?=$usuarios['rol']?>"><?=$usuarios['rol']?></option>
-            <option value="admin">Administrador</option>
-            <option value="usuario">Usuario</option>
-        </select>
-        <button type="submit">editar</button>
-    </form>
+            <label for="">nombre</label>
+            <input type="text" value="<?=$usuarios['nombre']?>" name="nombre">
+            <label for="">Correo</label>
+            <input type="text" value="<?=$usuarios['correo']?>" name="correo">
+            <label for="">rol</label>
+            <select name="roles" id="rol">
+                <option value="<?=$usuarios['rol']?>"><?=$usuarios['rol']?></option>
+                <option value="admin">Administrador</option>
+                <option value="usuario">Usuario</option>
+            </select>
+            <button type="submit">editar</button>
+        </form>
+    </div>
 
+    <?php
+        include '../frontend/includes/footer.php';
+    ?>
 </body>
 </html>

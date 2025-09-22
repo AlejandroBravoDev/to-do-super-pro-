@@ -1,6 +1,6 @@
 <?php
 require_once 'conexion.php';
-
+$mensaje = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token = $_POST['token'];
     $nueva = password_hash($_POST['nueva_contrasena'], PASSWORD_DEFAULT);
@@ -26,10 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Borrar el token para que no pueda volver a usarse
         $stmt = $conexion->prepare("DELETE FROM password_resets WHERE token = ?");
         $stmt->bind_param("s", $token);
-        $stmt->execute();
+        if($stmt->execute()){
+            $mensaje = "Contraseña actualizada correctamente.";
+        } else {
+            $mensaje = "Error al actualizar la contraseña.";
+        }
         $stmt->close();
 
-        echo "Tu contraseña ha sido restablecida correctamente.";
+        header("Location: ../frontend/nueva_contrasena.php");
     } else {
         echo "El enlace no es válido o ha expirado.";
     }
