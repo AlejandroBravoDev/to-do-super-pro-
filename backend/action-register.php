@@ -8,26 +8,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $rol = $_POST["rol"] ?? "usuario";
 
     $clave_hash = password_hash($clave, PASSWORD_DEFAULT);
+ $rutaAvatar = "frontend/avatares/default-avatar.png"; // Avatar por defecto
 
-    // --------------------------
-    // Manejo del avatar
-    // --------------------------
-    $rutaAvatar = "frontend/avatares/default-avatar.png"; // Avatar por defecto
+if (!empty($_FILES["avatar"]["name"])) {
+    $carpetaDestino = "../frontend/avatares/"; // ruta física para mover
+    $nombreArchivo = time() . "_" . basename($_FILES["avatar"]["name"]);
+    $rutaAvatar = "frontend/avatares/" . $nombreArchivo; // ruta que guardamos en BD
 
-    if (!empty($_FILES["avatar"]["name"])) {
-        $carpetaDestino = "frontend/avatares/";
-        $nombreArchivo = time() . "_" . basename($_FILES["avatar"]["name"]);
-        $rutaAvatar = $carpetaDestino . $nombreArchivo;
-
-        // Guardar físicamente en la carpeta
-        if (!move_uploaded_file($_FILES["avatar"]["tmp_name"], "../" . $rutaAvatar)) {
-            $rutaAvatar = "frontend/avatares/default-avatar.png";
-        }
+    if (!move_uploaded_file($_FILES["avatar"]["tmp_name"], $carpetaDestino . $nombreArchivo)) {
+        $rutaAvatar = "frontend/avatares/default-avatar.png";
     }
+}
 
-    // --------------------------
-    // Verificar si el correo ya existe
-    // --------------------------
     $check = $conexion->prepare("SELECT id FROM usuarios WHERE correo = ?");
     $check->bind_param("s", $correo);
     $check->execute();

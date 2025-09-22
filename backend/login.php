@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($error_correo) && empty($error_contrasena)) {
-        $sql = "SELECT id, nombre, correo, clave_hash, rol FROM usuarios WHERE correo = ?";
+        $sql = "SELECT id, nombre, correo, clave_hash, rol, avatar FROM usuarios WHERE correo = ?";
         if ($stmt = $conexion->prepare($sql)) {
             $stmt->bind_param("s", $correo);
             $stmt->execute();
@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION["nombre"] = $usuario["nombre"];
                     $_SESSION["correo"] = $usuario["correo"];
                     $_SESSION["rol"] = $usuario["rol"]; 
+                    $_SESSION["avatar"] = $usuario["avatar"]; 
 
                     header("Location: frontend/interfaz.php");
                     exit;

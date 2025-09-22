@@ -2,8 +2,6 @@
 require_once "conexion.php";
 session_start();
 
-
-
 $idUsuario = $_SESSION['id'];
 $nombre = $_POST['nombre'] ?? '';
 $correo = $_POST['correo'] ?? '';
@@ -29,16 +27,18 @@ if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
     $rutaDestino = $directorio . $nombreArchivo;
 
     if (move_uploaded_file($_FILES["avatar"]["tmp_name"], $rutaDestino)) {
-        $avatarPath = "avatares/" . $nombreArchivo;
+    $avatarPath = "frontend/avatares/" . $nombreArchivo;
 
-        //Eliminamos el avatar anterior si es que el usuario tiene
-        if (!empty($avatarAnterior)) {
-            $rutaAnterior = "../frontend/" . $avatarAnterior;
-            if (file_exists($rutaAnterior)) {
-                unlink($rutaAnterior);
-            }
+    
+    
+    if (!empty($avatarAnterior)) {
+        $rutaAnterior = "../" . $avatarAnterior;
+        if (file_exists($rutaAnterior)) {
+            unlink($rutaAnterior);
         }
     }
+}
+
 }
 
 if ($avatarPath) {

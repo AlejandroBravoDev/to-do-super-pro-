@@ -16,4 +16,4 @@ document.getElementById("btnEditar").addEventListener("click", function() {
 
             document.getElementById("btnGuardar").style.display = "inline-block";
             this.style.display = "none"; // Ocultamos el botón Editar
-        });
+  });

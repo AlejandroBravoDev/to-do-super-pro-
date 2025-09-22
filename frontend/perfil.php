@@ -11,13 +11,12 @@ $stmt = $conexion->prepare($sql);
 $stmt->bind_param("i", $idUsuario);
 $stmt->execute();
 $result = $stmt->get_result();
-//buscamos los datos en la base de datos y los hacemos variables
 if ($fila = $result->fetch_assoc()) {
     $nombre = $fila['nombre'];
     $correo = $fila['correo'];
     $rol = $fila['rol'];
     $creado_en = $fila['creado_en'];
-    $avatar = !empty($fila['avatar']) ? "../frontend/" . $fila['avatar'] : "../frontend/avatares/default.png";
+    $avatarPath = $fila['avatar'];
 } else {
     echo "Error: usuario no encontrado.";
     exit;
@@ -39,7 +38,11 @@ if ($fila = $result->fetch_assoc()) {
         <h1 style="text-align:center;">Mi perfil</h1>
         <form method="post" action="../backend/action-actualizar-perfil.php" enctype="multipart/form-data">
             <div class="avatar-container">
-                <img src="<?php echo htmlspecialchars($avatar); ?>" alt="Avatar" width="120">
+                <?php if (!empty($avatarPath)): ?>
+                    <img src="../<?php echo htmlspecialchars($avatarPath); ?>" alt="Avatar de <?php echo htmlspecialchars($nombre); ?>" width="120">
+                <?php else: ?>
+                    <img src="../frontend/avatares/default-avatar.png" width="150">
+                <?php endif; ?>
             </div>
             <div class="datos-container">
 

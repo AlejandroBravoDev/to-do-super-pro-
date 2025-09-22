@@ -213,49 +213,49 @@ if (isset($_GET['query'])) {
     <h1 class="misTareas">Mis tareas</h1>
     <div class="mostrar_tareas">
         
-    <?php
-        if ($rol === "admin") {
-            $sql = "SELECT * FROM tareas";
-        }else {
-        if ($idUsuario) {
-            $sql = "SELECT * FROM tareas WHERE id_creador = $idUsuario OR id_asignado = $idUsuario"; 
-        } else {
-            $sql = "SELECT * FROM tareas WHERE 1=0";//No sale nada si no se ha iniciado sesion    
-        }
-        }
-    ?>
-        
-    <?php
+<?php
+    if ($rol === "admin") {
+        $sql = "SELECT * FROM tareas";
+    }else {
+    if ($idUsuario) {
+        $sql = "SELECT * FROM tareas WHERE id_creador = $idUsuario OR id_asignado = $idUsuario"; 
+    } else {
+        $sql = "SELECT * FROM tareas WHERE 1=0";//No sale nada si no se ha iniciado sesion    
+    }
+    }
+?>  
+<?php
 
-$sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
-$resultado = mysqli_query($conexion, $sql); 
-if ($resultado ->num_rows > 0) { 
-    $visto = []; 
-    while ($row = $resultado -> fetch_assoc()) { 
-        if(in_array($row["titulo"], $visto)){ continue; } 
-        $visto[] = $row["titulo"]; 
-        echo '<div class="tarea-card">';
-        echo '<div class="tarea-header">';
-        echo '<div class="tarea-info">';
-        echo "<b>" . htmlspecialchars($row["titulo"]) . "</b> | Estado: " . htmlspecialchars($row["estado"]) . " | Prioridad: " . htmlspecialchars($row["prioridad"]) . " | Vence: " . htmlspecialchars($row["fecha_vencimiento"]);
-        echo "</div>";
-        echo '<div class="acciones">';
-        echo "<form method='post' action='../backend/action-eliminar-tarea.php'> 
-                <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
-                <button type='submit'>Eliminar</button> 
-              </form>";
-        echo "<form method='post' action='../frontend/editar-tarea.php'> 
-                <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
-                <button type='submit'>Editar</button> 
-              </form>";
-        echo '</div>';
-        echo '</div>';
-        echo "<form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data' class='form-adjunto'> 
-                <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
-                <label>Subir archivo adjunto</label> 
-                <input type='file' name='archivo' id='archivo'> 
-                <button type='submit'>Subir</button> 
-              </form>";
+    $sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
+    $resultado = mysqli_query($conexion, $sql); 
+    if ($resultado ->num_rows > 0) { 
+        $visto = []; 
+        while ($row = $resultado -> fetch_assoc()) { 
+            if(in_array($row["titulo"], $visto)){ continue; } 
+            $visto[] = $row["titulo"]; 
+            echo '<div class="tarea-card">';
+            echo '<div class="tarea-header">';
+            echo '<div class="tarea-info">';
+            echo "<b>" . htmlspecialchars($row["titulo"]) . "</b> | Estado: " . htmlspecialchars($row["estado"]) . " | Proyecto: " . htmlspecialchars($row["nombre_proyecto"]) ." | Etiqueta: " . htmlspecialchars($row["nombre_etiqueta"]) . " | Prioridad: " . htmlspecialchars($row["prioridad"]) . " | Vence: " . htmlspecialchars($row["fecha_vencimiento"]);
+            echo "<p>Descripcion: <span class='descripcion'>" . htmlspecialchars($row["descripcion"]). "</span></p>";
+            echo "</div>";
+            echo '<div class="acciones">';
+            echo "<form method='post' action='../backend/action-eliminar-tarea.php'> 
+                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
+                    <button type='submit'>Eliminar</button> 
+                </form>";
+            echo "<form method='post' action='../frontend/editar-tarea.php'> 
+                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
+                    <button type='submit'>Editar</button> 
+                </form>";
+            echo '</div>';
+            echo '</div>';
+            echo "<form action='../backend/adjuntos.php' method='post' enctype='multipart/form-data' class='form-adjunto'> 
+                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'> 
+                    <label>Subir archivo adjunto</label> 
+                    <input type='file' name='archivo' id='archivo'> 
+                    <button type='submit'>Subir</button> 
+                </form>";
 
             // Form para crear subtarea
             echo '<div class="subtareas">';
@@ -314,12 +314,25 @@ if ($resultado ->num_rows > 0) {
                     echo "<li>No hay comentarios aún.</li>"; 
                 } 
                 echo "</ul>"; 
+                  //Tarea completada  
+            if($row["estado"] === "terminada"){
+                echo "<p style='color:green;'><i class='fa-solid fa-circle-check'></i> Tarea completada</p>
+                <form method='post' action='../backend/action-archivar-tarea.php' style='margin:0;'>
+                <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
+                <button type='submit'>Archivar tarea</button>
+                </form>";
+            } else {
+                echo '<form method="post" action="../backend/action-completar-tarea.php" style="margin:0;"> 
+                    <input type="hidden" name="id_tarea" value="' . $row["id"] . '">
+                    <button type="submit">Marcar como completada</button>
+                </form>';
+            }
             }
             echo '</div>';
             echo '</div>';
         } 
     }  else { 
-        echo "<p><i>No tienes ninguna tarea Creada.</i></p>"; 
+        echo "<p><i>No tienes ninguna tarea creada.</i></p>"; 
     } 
     ?> 
 </div>
@@ -357,8 +370,12 @@ if ($resultado ->num_rows > 0) {
                                 </form>
                               </td>";
                             echo "<tr>";
-                            if($row["estado"] === "completada"){
-                                echo "<p style='color:green;'><i class='fa-solid fa-circle-check'></i> Tarea completada</p>";
+                            if($row["estado"] === "terminada"){
+                                echo "<p style='color:green;'><i class='fa-solid fa-circle-check'></i> Tarea completada</p>
+                                <form method='post' action='../backend/action-archivar-tarea.php' style='margin:0;'>
+                                    <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
+                                    <button type='submit'>Archivar tarea</button>
+                                </form>";
                             } else {
                                 echo '<form method="post" action="../backend/action-completar-tarea.php" style="margin:0;"> 
                                     <input type="hidden" name="id_tarea" value="' . $row["id"] . '">
@@ -374,7 +391,7 @@ if ($resultado ->num_rows > 0) {
                     echo "<p style='text-align:center;'>$mensaje</p>"; 
                 }
             
-                    echo "<p style='text-align:center;'>$mensaje</p>"; 
+                
 
         ?>
     </div>
@@ -408,13 +425,6 @@ if ($resultado ->num_rows > 0) {
                 <option value="media">media</option>
                 <option value="baja">baja</option>
             </select>
-
-            <label for="">estado</label>
-            <select name="estado" id="">
-                <option value="completada">completada</option>
-                <option value="enProceso">en proceso</option>
-            </select>
-
             <?php
                 if (isset($_SESSION['id'])) {
                     $idUsuario = $_SESSION['id'];
@@ -466,10 +476,6 @@ if ($resultado ->num_rows > 0) {
             </select>
 
             <button type="submit">Agregar</button>
-            <div class="links links_interfaz">
-                <a href="proyectos.php">Crear nuevo proyecto</a>
-                <a href="etiquetas.php">Crear etiqueta</a>
-            </div>
         </form>
 
     <?php include("includes/footer.php");?>

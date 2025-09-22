@@ -4,6 +4,7 @@
     </div>
     <nav class="nav">
         <ul>
+            <li><a href="interfaz.php" class="vinculos">Inicio</a></li>
             <?php
                 $sql = "SELECT * FROM usuarios WHERE id = ?";
                 $stmt = $conexion->prepare($sql);
@@ -12,12 +13,14 @@
                 $resultado = $stmt->get_result();
                 $usuario = $resultado->fetch_assoc();
                 if ($usuario && $usuario["rol"] === "admin") {
-                    echo '<li><a href="../frontend/interfazAdmin.php" class="vinculos">Administrar Usuarios</a></li>';
+                    echo '<li><a href="../frontend/interfazAdmin.php" class="vinculos">Administrar usuarios</a></li>';
                 }
             ?>
-            <li><a href="interfaz.php" class="vinculos">Inicio</a></li>
+            
             <li><a href="proyectos.php" class="vinculos">Proyectos</a></li>
-            <li><a href="perfil.php" class="vinculos">Mi Perfil</a></li>
+            <li><a href="etiquetas.php" class="vinculos">Etiquetas</a></li>
+            <li><a href="perfil.php" class="vinculos">Mi perfil</a></li>
+            <li><a href="archivadas.php" class="vinculos">Archivadas</a></li>
 
             <?php if (isset($_SESSION["id"])): ?>
                
