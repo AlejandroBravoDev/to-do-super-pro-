@@ -802,7 +802,6 @@ h1 {
 }
 
 .etiqueta_individual{
-
     padding: 10px 3em 10px 3em;
     width: 20%;
     border-radius: 5px;
@@ -831,9 +830,10 @@ h1 {
     width: 50%;
     height: auto;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    gap: 20px;
 }
 
 .etiquetas_boton{
