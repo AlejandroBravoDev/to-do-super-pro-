@@ -827,13 +827,15 @@ h1 {
     gap: 10px;
 }
 
+
 .etiquetas{
     width: 50%;
     height: auto;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    gap: 20px;
 }
 
 .etiquetas_boton{
