@@ -3,10 +3,10 @@ require_once "../backend/conexion.php";
 
 
 $id_tarea = $_POST['id_tarea'];
-$id_usuario = $_SESSION['id']; // usuario logueado
+$id_usuario = $_SESSION['id'];
 $estado = 'terminada';
 
-// 1. Verificar a quién pertenece la tarea
+//Buscamos la tarea y obtenemos sus datos
 $sql = "SELECT id_asignado, id_creador FROM tareas WHERE id = ?";
 $stmt = $conexion->prepare($sql);
 $stmt->bind_param("i", $id_tarea);
@@ -25,7 +25,7 @@ if ($tarea['id_asignado'] != $id_usuario && $tarea['id_creador'] != $id_usuario)
     exit;
 }
 
-// 3. Si pasa la validación, actualizar el estado
+//Actualizamos el estado de la tarea
 $sql = "UPDATE tareas SET estado = ? WHERE id = ?";
 $stmt = $conexion->prepare($sql);
 $stmt->bind_param("si", $estado, $id_tarea);

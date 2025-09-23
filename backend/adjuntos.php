@@ -32,9 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             header('location: ../frontend/interfaz.php');
         } else {
-            echo "❌ Error al mover el archivo a la carpeta destino";
+            echo "Error al mover el archivo a la carpeta destino";
         }
     } else {
-        echo "❌ No se recibió ningún archivo válido";
+        echo "No se recibió ningún archivo válido";
     }
 }

@@ -87,7 +87,7 @@ if ($fila = $result->fetch_assoc()) {
             });
 
             document.getElementById("btnGuardar").style.display = "inline-block";
-            this.style.display = "none"; // Ocultamos el botón Editar
+            this.style.display = "none"; //Ocultamos el botón Editar
         });
     </script>
 </body>
