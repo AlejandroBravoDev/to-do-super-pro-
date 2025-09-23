@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"];
     $correo = $_POST["correo"];
     $clave = $_POST["clave"];
-    $rol = $_POST["rol"] ?? "usuario";
+    $rol = "usuario"; 
 
     $clave_hash = password_hash($clave, PASSWORD_DEFAULT);
  $rutaAvatar = "frontend/avatares/default-avatar.png"; // Avatar por defecto

@@ -20,11 +20,6 @@
             <input type="email" name="correo" placeholder="Correo Electrónico" class="input_email input_register" required />
             <input type="password" name="clave" placeholder="Contraseña" class="input_contrasena input_register" required />
             
-            <select name="rol" clcass="input_rol input_register"required>
-                <option value="usuario">Usuario</option>
-                <option value="admin">Administrador</option>
-            </select>
-            
             <input type="file" name="avatar" accept="image/*" class="input_imagen input_register"/>
             
             <button type="submit" class="button_register">Registrar</button>
