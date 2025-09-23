@@ -19,9 +19,8 @@ if (!$tarea) {
     die("Error: tarea no encontrada.");
 }
 
-// 2. Validar: solo puede completar quien está asignado
-if ($tarea['id_asignado'] != $id_usuario) {
-    // si no es el asignado, no puede completar
+//solo deja completarla si yo soy quien la creo o a quien se la asignaron
+if ($tarea['id_asignado'] != $id_usuario && $tarea['id_creador'] != $id_usuario) {
     header("Location: ../frontend/interfaz.php?error=no_autorizado");
     exit;
 }
