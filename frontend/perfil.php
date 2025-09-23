@@ -1,12 +1,16 @@
 <?php
 require_once "../backend/conexion.php";
 
+if(!isset($_SESSION["id"])){
+    header("Location: ../index.php");
+    exit();
+}
 
 //Buscamos el id del usuario que inicio sesion
 $idUsuario = $_SESSION['id'];
 
 //Estamos trayendo los datos de el usuario logueado
-$sql = "SELECT nombre, correo, rol, avatar, creado_en FROM usuarios WHERE id = ?";
+$sql = "SELECT nombre, correo, rol, avatar, creado_en, id FROM usuarios WHERE id = ?";
 $stmt = $conexion->prepare($sql);
 $stmt->bind_param("i", $idUsuario);
 $stmt->execute();
@@ -17,6 +21,7 @@ if ($fila = $result->fetch_assoc()) {
     $rol = $fila['rol'];
     $creado_en = $fila['creado_en'];
     $avatarPath = $fila['avatar'];
+    $id = $fila['id'];
 } else {
     echo "Error: usuario no encontrado.";
     exit;
@@ -45,13 +50,16 @@ if ($fila = $result->fetch_assoc()) {
                 <?php endif; ?>
             </div>
             <div class="datos-container">
-
+            
             <label>Nombre:</label>
             <input type="text" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>" disabled>
 
             <label>Correo:</label>
             <input type="email" name="correo" value="<?php echo htmlspecialchars($correo); ?>" disabled>
 
+
+            <label>ID:</label>
+            <input type="text" value="<?php echo htmlspecialchars($id); ?>" disabled readonly>
 
             <label>Rol:</label>
             <input type="text" value="<?php echo htmlspecialchars($rol); ?>" disabled readonly>

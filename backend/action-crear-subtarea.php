@@ -5,7 +5,9 @@ require_once "conexion.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id_tarea"]) && isset($_POST["subtarea"])) {
     $id_tarea = intval($_POST["id_tarea"]);
     $subtarea = trim($_POST["subtarea"]);
+    $estado = "en_proceso";
 
+    
     if (!empty($subtarea)) {
         //busca las subtareas existentes
         $sql = "SELECT subtareas FROM tareas WHERE id = ?";

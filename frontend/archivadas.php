@@ -3,6 +3,11 @@ require_once "../backend/conexion.php";
 
 $id_usuario = $_SESSION['id'];
 
+if(!isset($_SESSION["id"])){
+    header("Location: ../index.php");
+    exit();
+}
+
 $sql = "SELECT id, titulo, descripcion, usuario 
         FROM archivadas 
         WHERE id_creador = ? OR id_asignado = ?";
@@ -11,6 +16,8 @@ $stmt = $conexion->prepare($sql);
 $stmt->bind_param("ii", $id_usuario, $id_usuario);
 $stmt->execute();
 $result = $stmt->get_result();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -30,7 +37,6 @@ $result = $stmt->get_result();
             
             <?php while ($tarea = $result->fetch_assoc()): ?>
                 <div class="tarea-archivada">
-                    <h1>Tareas archivadas</h1>
                     <h3><?php echo htmlspecialchars($tarea['titulo']); ?></h3>
                     <p>Descripcion: <?php echo htmlspecialchars($tarea['descripcion']); ?></p>
                     <p>Creada por: <strong><?php echo htmlspecialchars($tarea['usuario']); ?></strong></p>

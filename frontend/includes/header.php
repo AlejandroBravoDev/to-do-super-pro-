@@ -14,17 +14,20 @@
                 $usuario = $resultado->fetch_assoc();
                 if ($usuario && $usuario["rol"] === "admin") {
                     echo '<li><a href="../frontend/interfazAdmin.php" class="vinculos">Administrar usuarios</a></li>';
+                    echo '<li><a href="proyectos.php" class="vinculos">Proyectos</a></li>';
                 }
             ?>
-            
-            <li><a href="proyectos.php" class="vinculos">Proyectos</a></li>
+            <?php 
+                if ($usuario && $usuario["rol"] === "usuario") {
+                    echo '<li><a href="../frontend/visualizarProyectos.php" class="vinculos">Ver proyectos</a></li>';
+                }
+            ?>
             <li><a href="etiquetas.php" class="vinculos">Etiquetas</a></li>
             <li><a href="perfil.php" class="vinculos">Mi perfil</a></li>
             <li><a href="archivadas.php" class="vinculos">Archivadas</a></li>
-
+            
             <?php if (isset($_SESSION["id"])): ?>
-               
-                <li><a href="../backend/logout.php" class="btn-salir">Cerrar sesion</a></li>
+               <li><a href="../backend/logout.php" class="btn-salir">Cerrar sesion</a></li>
             <?php else: ?>
                 
                 <li><a href="../index.php" class="btn-login">Iniciar sesión</a></li>

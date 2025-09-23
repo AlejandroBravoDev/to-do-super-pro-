@@ -21,9 +21,9 @@
             <div class="footer-links">
                 <h4>Tienda</h4>
                 <ul>
-                    <li><a href="#">Videojuegos</a></li>
-                    <li><a href="#">Plataformas</a></li>
-                    <li><a href="#">Contenido</a></li>
+                    <li><a href="#">Crea tus tarea</a></li>
+                    <li><a href="#">Enlazalas a proyectos</a></li>
+                    <li><a href="#">Añade subtareas</a></li>
                 </ul>
             </div>
             <div class="footer-links">

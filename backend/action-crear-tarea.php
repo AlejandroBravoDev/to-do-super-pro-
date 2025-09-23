@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id_usuario = $_SESSION["id"];
     $titulo_tarea = $_POST["titulo"] ?? null;
     $fecha = $_POST["fecha-vencimiento"] ?? null;
+    $fecha_inicio = $_POST["fecha-inicio"] ?? null;
     $descripcion = $_POST["descripcion"] ?? null;
     $estado = "en_progreso"; //Valor por defecto
     $prioridad = $_POST["prioridad"] ?? null;
@@ -80,17 +81,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     //Insertamos la nueva tarea
     $sql = "INSERT INTO tareas (
-        id_creador, titulo, descripcion, fecha_vencimiento, estado, prioridad,
+        id_creador, titulo, descripcion,fecha_inicio ,fecha_vencimiento, estado, prioridad,
         id_asignado, nombre_asignado, id_proyecto, nombre_proyecto, nombre_etiqueta
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param(
-        "issssssisss",
+        "isssssssisss",
         $id_usuario,
         $titulo_tarea,
         $descripcion,
+        $fecha_inicio,
         $fecha,
         $estado,
         $prioridad,

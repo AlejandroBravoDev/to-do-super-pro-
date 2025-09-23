@@ -2,7 +2,10 @@
 require_once "../backend/conexion.php";
 
 // Consulta con JOIN para traer el nombre del propietario
-
+if(!isset($_SESSION["id"])){
+    header("Location: ../index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +36,7 @@ require_once "../backend/conexion.php";
             <?php while ($row = $resultado->fetch_assoc()): ?>
                 <li>
                     <strong><?= htmlspecialchars($row['nombre']) ?></strong><br>
-                    <?= htmlspecialchars($row['descripcion']) ?><br>
+                    <span class="descripcion_proyectos"><?= htmlspecialchars($row['descripcion']) ?></span><br>
                     <em>Propietario:</em> <?= htmlspecialchars($row['propietario'] ?? 'Sin propietario') ?><br>
                     <small>Creado en: <?= htmlspecialchars($row['creado_en']) ?></small>
                     <form action="../backend/eliminarProyecto.php" method="POST" style="display:inline;">
@@ -47,9 +50,19 @@ require_once "../backend/conexion.php";
             <li>No hay proyectos registrados</li>
         <?php endif; ?>
     </ul>
-    <div class="links2">
-        <a href="proyectos.php">Volver a crear proyectos</a>
+    <div class="links">
+        <?php
+            $sql = "SELECT * FROM usuarios WHERE id = ?";
+
+            if ($usuario && $usuario["rol"] === "admin") {
+                echo '<li class="li-class"><a href="proyectos.php" class="vinculos-proyectos">Volver a crear proyectos</a></li>';
+                
+            }else{
+                echo '<li class="li-class"><a href="interfaz.php" class="vinculos-proyectos" style="color:white;">Volver a inicio</a></li>';
+            }
+        ?>
     </div>
+
      <?php include("includes/footer.php");?>
 </body>
 </html>

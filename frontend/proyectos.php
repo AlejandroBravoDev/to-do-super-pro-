@@ -1,5 +1,23 @@
 <?php
 require_once '../backend/crearProyectos.php';
+
+    if(!isset($_SESSION["id"])){
+        header("Location: ../index.php");
+        exit();
+    }
+
+    $sql = "SELECT * FROM usuarios WHERE id = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $_SESSION["id"]);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if($usuario = $resultado -> fetch_assoc()){
+        if($usuario["rol"] === "usuario"){
+            header("Location: ../frontend/interfaz.php");
+            exit();
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">

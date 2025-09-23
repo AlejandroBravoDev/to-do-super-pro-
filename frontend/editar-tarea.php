@@ -12,6 +12,12 @@
         $tarea = $resultado->fetch_assoc();
     }
 
+
+    if(!isset($_SESSION["id"])){
+        header("Location: ../index.php");
+        exit();
+    }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -85,7 +91,18 @@
                 }
             ?>
         <!--Select para proyectos-->
+        <label for="">etiquetas</label>
+        <select name="etiquetas" id="">
+            <option value="">etiquetas</option>
 
+            <?php
+                $sql = "SELECT * FROM etiquetas";
+                $resultado = $conexion->query($sql);
+                while($row = $resultado -> fetch_assoc()){
+                    echo "<option value='".$row['id_etiqueta']."'>".$row['nombre']."</option>";
+                }
+            ?>
+        </select>
         <button type="submit">Editar</button>
         <div class="links links_editar_tarea">
             <a href="interfaz.php">Volver a inicio</a>

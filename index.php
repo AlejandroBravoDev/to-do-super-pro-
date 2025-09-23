@@ -16,11 +16,11 @@
         <form  method="post" class="form_login">
             <h1>Inicio de sesion</h1>
             <label for="">Correo Electronico</label>
-            <?=$error_correo?>
+            <span style="color:black;"><?=$error_correo?></span>
             <input type="text" name="correo" placeholder="Correo electronico" class="input_email input">
             
             <label for="">Contraseña</label>
-            <?=$error_contrasena?>
+            <span style="color:black;"><?=$error_contrasena?></span>
             <input type="password" name="contrasena" placeholder="contraseña" class="input_password input">
 
             <button type="submit">Iniciar sesion</button>

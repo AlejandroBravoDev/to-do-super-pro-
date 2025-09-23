@@ -1,6 +1,11 @@
 <?php
 require_once "../backend/conexion.php";
 
+    if(!isset($_SESSION["id"])){
+        header("Location: ../index.php");
+        exit();
+    }
+
     if(isset($_POST["id_etiqueta"])){
         $id_etiqueta = $_POST["id_etiqueta"];
 

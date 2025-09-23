@@ -1220,3 +1220,24 @@ hr{
     border-top: 1px solid #dcdde1;
     margin: 20px 0;
 }
+.vinculos-proyectos{
+    text-decoration: none;
+    list-style: none;
+
+}
+.vinculos-proyectos:hover{
+    color: white;
+}
+.li-class{
+    list-style: none;
+    margin-left: 120px;
+    margin-bottom: 50px;   
+}
+
+.descripcion_proyectos{
+    word-wrap: break-word; 
+    
+    overflow-wrap: break-word;  
+    white-space: normal; 
+
+}

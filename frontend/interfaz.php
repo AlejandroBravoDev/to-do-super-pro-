@@ -5,6 +5,11 @@ require_once "../backend/adjuntos.php";
 
 $idUsuario = $_SESSION['id'] ?? null; 
 $rol = $_SESSION['rol'] ?? 'usuario';
+
+    if(!isset($_SESSION["id"])){
+        header("Location: ../index.php");
+        exit();
+    }
 ?> 
 
 <!DOCTYPE html> 
@@ -263,6 +268,7 @@ if (isset($_GET['query'])) {
             echo "<input type='hidden' name='id_tarea' value='" . $row['id'] . "'>";
             echo "<input type='text' name='subtarea' placeholder='Añade una subtarea' required>";
             echo "<button type='submit'>Crear Subtarea</button>";
+
             echo "</form>";
 
             // Muestro las subtareas
@@ -276,7 +282,18 @@ if (isset($_GET['query'])) {
                     echo " <form method='post' action='../backend/action-eliminar-subtarea.php'>";
                     echo "<input type='hidden' name='id_tarea' value='" . $row['id'] . "'>";
                     echo "<input type='hidden' name='subtarea' value='" . htmlspecialchars($sub) . "'>";
-                    echo "<button type='submit'>Eliminar</button>";
+                    if($row["estado_subtareas"] === "terminada"){
+                        echo "<p style='color:green;'><i class='fa-solid fa-circle-check'></i> Tarea completada</p>
+                        <form method='post' action='../backend/action-archivar-tarea.php' style='margin:0;'>
+                        <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
+                        <button type='submit'>Archivar tarea</button>
+                        </form>";
+                    } else {
+                        echo '<form method="post" action="../backend/action-completar-tarea.php" style="margin:0;"> 
+                            <input type="hidden" name="id_tarea" value="' . $row["id"] . '">
+                            <button type="submit">Completar</button>
+                        </form>';
+                    }
                     echo "</form></li>";
                 }
                 echo "</ul>";
@@ -314,7 +331,7 @@ if (isset($_GET['query'])) {
                     echo "<li>No hay comentarios aún.</li>"; 
                 } 
                 echo "</ul>"; 
-                  //Tarea completada  
+                //Tarea completada  
             if($row["estado"] === "terminada"){
                 echo "<p style='color:green;'><i class='fa-solid fa-circle-check'></i> Tarea completada</p>
                 <form method='post' action='../backend/action-archivar-tarea.php' style='margin:0;'>
@@ -324,7 +341,7 @@ if (isset($_GET['query'])) {
             } else {
                 echo '<form method="post" action="../backend/action-completar-tarea.php" style="margin:0;"> 
                     <input type="hidden" name="id_tarea" value="' . $row["id"] . '">
-                    <button type="submit">Marcar como completada</button>
+                    <button type="submit">Completar</button>
                 </form>';
             }
             }
@@ -358,6 +375,7 @@ if (isset($_GET['query'])) {
                             echo "<td>" . htmlspecialchars($row["prioridad"]) . "</td>";
                             echo "<td>" . htmlspecialchars($row["fecha_vencimiento"]) . "</td>";
                             echo "<td>" . htmlspecialchars($row["estado"]) . "</td>";
+                            
                             echo "<td>" . htmlspecialchars($row["nombre_asignado"]) . "</td>";
                             echo "<td>" . htmlspecialchars($row["nombre_etiqueta"]) . "</td>";
                             echo "<td>" . htmlspecialchars($row["nombre_proyecto"]) . "</td>";
@@ -410,6 +428,8 @@ if (isset($_GET['query'])) {
             <input type="text" name="titulo" placeholder="tarea">
             <label for="">Descripcion</label>
             <textarea name="descripcion" placeholder="Añade una descripcion"></textarea>
+            <label for="">Fecha de inicio</label>
+            <input type="date" name="fecha-inicio">
             <label for="">fecha de vencimineto</label>
             <input type="date" name="fecha-vencimiento">
             <?php
