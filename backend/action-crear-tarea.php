@@ -7,18 +7,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $titulo_tarea = $_POST["titulo"] ?? null;
     $fecha = $_POST["fecha-vencimiento"] ?? null;
     $descripcion = $_POST["descripcion"] ?? null;
-    $estado = "en_progreso"; // Valor por defecto
+    $estado = "en_progreso"; //Valor por defecto
     $prioridad = $_POST["prioridad"] ?? null;
     $id_asignado = $_POST["asignar-usuario"] ?? null;
     $id_proyecto = isset($_POST['asignar-proyecto']) ? trim($_POST['asignar-proyecto']) : "";
     $etiqueta = $_POST["etiqueta"] ?? null;
+    $usuario = $_POST["rol"];
 
     //Debe llenar todos los campos requeridos
-    if (empty($titulo_tarea) || empty($estado) || empty($prioridad) || $id_proyecto === "" || empty($fecha) || empty($descripcion)|| empty($etiqueta)) {
+    if($usuario["rol"] === "admin"){
+        if (empty($titulo_tarea) || empty($prioridad) || $id_proyecto === "" || empty($fecha) || empty($descripcion)|| empty($etiqueta)) {
         $_SESSION["mensaje_campos_obligatorios"] = "Llene todos los campos obligatorios!";
         header("Location: ../frontend/interfaz.php");
         exit;
+        }
+
+    }else if (empty($titulo_tarea) || empty($prioridad) || empty($fecha) || empty($descripcion)|| empty($etiqueta)) {
+            $_SESSION["mensaje_campos_obligatorios"] = "Llene todos los campos obligatorios!";
+            header("Location: ../frontend/interfaz.php");
+            exit;
+        
     }
+    
     //No permitira crear tareas con fechas anteriores
     $fecha_actual = date("Y-m-d");
     if ($fecha < $fecha_actual) {
