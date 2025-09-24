@@ -12,12 +12,10 @@
         $tarea = $resultado->fetch_assoc();
     }
 
-
     if(!isset($_SESSION["id"])){
         header("Location: ../index.php");
         exit();
     }
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -48,8 +46,6 @@
             <option value="baja">baja</option>
         </select>
 
-
-        <!--select prioridad (alta, media y baja)-->
         <label for="">estado</label>
         <select name="estado" id="">
             <option value="<?= $tarea['estado']?>"><?= $tarea['estado']?></option>
@@ -68,7 +64,6 @@
                         echo '<select name="asignar-usuario" id="">';
                         echo '<option value="">asignar usuario</option>';
 
-                        // Consulta para obtener todos los usuarios
                         $sql_usuarios = "SELECT id, nombre FROM usuarios";
                         $res_usuarios = mysqli_query($conexion, $sql_usuarios);
                         while ($row = mysqli_fetch_assoc($res_usuarios)) {
@@ -80,7 +75,6 @@
                         echo '<select name="asignar-proyecto" id="">';
                         echo '<option value="">asignar proyecto</option>';
 
-                        // Consulta para obtener todos los proyectos
                         $sql_proyectos = "SELECT id, nombre FROM proyectos";
                         $res_proyectos = mysqli_query($conexion, $sql_proyectos);
                         while ($row = mysqli_fetch_assoc($res_proyectos)) {
@@ -90,16 +84,15 @@
                     }
                 }
             ?>
-        <!--Select para proyectos-->
         <label for="">etiquetas</label>
         <select name="etiquetas" id="">
             <option value="">etiquetas</option>
-
             <?php
                 $sql = "SELECT * FROM etiquetas";
                 $resultado = $conexion->query($sql);
                 while($row = $resultado -> fetch_assoc()){
-                    echo "<option value='".$row['id_etiqueta']."'>".$row['nombre']."</option>";
+                    $selected = ($row['nombre'] == $tarea['nombre_etiqueta']) ? "selected" : "";
+                    echo "<option value='".$row['id']."' $selected>".$row['nombre']."</option>";
                 }
             ?>
         </select>
@@ -107,8 +100,6 @@
         <div class="links links_editar_tarea">
             <a href="interfaz.php">Volver a inicio</a>
         </div>
-
-
     </form>
     </div>
     <?php include("includes/footer.php");?>

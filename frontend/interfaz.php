@@ -231,7 +231,13 @@ if (isset($_GET['query'])) {
 ?>  
 <?php
 
-    $sql = "SELECT * FROM tareas WHERE id_creador = " . $_SESSION['id'];
+    $sql = "SELECT t.*, p.nombre AS nombre_proyecto, 
+        e.nombre AS nombre_etiqueta, 
+        e.color  AS color_etiqueta
+        FROM tareas t
+        LEFT JOIN proyectos p ON t.id_proyecto = p.id
+        LEFT JOIN etiquetas e ON t.nombre_etiqueta = e.nombre
+        WHERE t.id_creador = " . $_SESSION['id'];
     $resultado = mysqli_query($conexion, $sql); 
     if ($resultado ->num_rows > 0) { 
         $visto = []; 
@@ -241,7 +247,7 @@ if (isset($_GET['query'])) {
             echo '<div class="tarea-card">';
             echo '<div class="tarea-header">';
             echo '<div class="tarea-info">';
-            echo "<b>" . htmlspecialchars($row["titulo"]) . "</b> | Estado: " . htmlspecialchars($row["estado"]) . " | Proyecto: " . htmlspecialchars($row["nombre_proyecto"]) ." | Etiqueta: " . htmlspecialchars($row["nombre_etiqueta"]) . " | Prioridad: " . htmlspecialchars($row["prioridad"]) . " | Vence: " . htmlspecialchars($row["fecha_vencimiento"]);
+            echo "<b>" . htmlspecialchars($row["titulo"]) . "</b> | Estado: " . htmlspecialchars($row["estado"]) . " | Proyecto: " . htmlspecialchars($row["nombre_proyecto"]) ." | Etiqueta: <span style='color:" . htmlspecialchars($row["color_etiqueta"]) . "; font-weight:bold;'>" . htmlspecialchars($row["nombre_etiqueta"]) . "</span> | Prioridad: " . htmlspecialchars($row["prioridad"]) . " | Vence: " . htmlspecialchars($row["fecha_vencimiento"]);
             echo "<p>Descripcion: <span class='descripcion'>" . htmlspecialchars($row["descripcion"]). "</span></p>";
             echo "</div>";
             echo '<div class="acciones">';
@@ -272,32 +278,34 @@ if (isset($_GET['query'])) {
             echo "</form>";
 
             // Muestro las subtareas
-            
             if (!empty($row["subtareas"])) {
                 echo "<ul>";
-                $lista_subtareas = explode(",", $row["subtareas"]);
-                foreach ($lista_subtareas as $sub) {
-                    $sub = trim($sub);
-                    echo "<li>" . htmlspecialchars($sub);
-                    echo " <form method='post' action='../backend/action-eliminar-subtarea.php'>";
-                    echo "<input type='hidden' name='id_tarea' value='" . $row['id'] . "'>";
-                    echo "<input type='hidden' name='subtarea' value='" . htmlspecialchars($sub) . "'>";
-                    if($row["estado_subtareas"] === "terminada"){
-                        echo "<p style='color:green;'><i class='fa-solid fa-circle-check'></i> Tarea completada</p>
-                        <form method='post' action='../backend/action-archivar-tarea.php' style='margin:0;'>
-                        <input type='hidden' name='id_tarea' value='" . $row["id"] . "'>
-                        <button type='submit'>Archivar tarea</button>
-                        </form>";
-                    } else {
-                        echo '<form method="post" action="../backend/action-completar-tarea.php" style="margin:0;"> 
-                            <input type="hidden" name="id_tarea" value="' . $row["id"] . '">
-                            <button type="submit">Completar</button>
-                        </form>';
-                    }
-                    echo "</form></li>";
+                $lista_subtareas = array_map("trim", explode(",", $row["subtareas"]));
+                $completadas = !empty($row["subtareas_completadas"]) ? array_map("trim", explode(",", $row["subtareas_completadas"])) : [];
+
+            foreach ($lista_subtareas as $sub) {
+                $sub = htmlspecialchars($sub);
+
+            //Verificar si la subtarea está en completadas
+            if (in_array($sub, $completadas)) {
+                echo "<li><i class='fa-solid fa-circle-check'></i> $sub</li>";
+            } else {
+                echo "<li>$sub 
+                <form method='post' action='../backend/action-completar-subtarea.php' style='display:inline;'>
+                    <input type='hidden' name='id_tarea' value='" . $row['id'] . "'>
+                    <input type='hidden' name='subtarea' value='" . $sub . "'>
+                    <button type='submit'>Completar</button>
+                </form>
+                <form method='post' action='../backend/action-eliminar-subtarea.php' style='display:inline;'>
+                    <input type='hidden' name='id_tarea' value='" . $row['id'] . "'>
+                    <input type='hidden' name='subtarea' value='" . $sub . "'>
+                    <button type='submit'>Eliminar</button>
+                </form>
+                </li>";
                 }
-                echo "</ul>";
-            }
+          }
+          echo "</ul>";
+          }
             echo '</div>';
 
             // Form para comentar

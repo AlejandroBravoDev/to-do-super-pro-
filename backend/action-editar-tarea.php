@@ -1,39 +1,35 @@
 <?php
-    require_once "conexion.php";
+require_once "conexion.php";
 
-    $mensaje = "";
-    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id_tarea"])){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $id_tarea = $_POST['id_tarea'];
+    $titulo = $_POST['titulo'];
+    $prioridad = $_POST['prioridad'];
+    $estado = $_POST['estado'];
 
-
-        $fecha_actual = date("Y-m-d H:i:s");
-        $id_tarea = $_POST["id_tarea"];
-        $id_usuario = $_SESSION["id"];
-
-        $titulo = $_POST["titulo"];
-        $fecha_vencimiento = $_POST["fecha-vencimiento"];
-        $prioridad = $_POST["prioridad"];
-        $estado = $_POST["estado"];
-        $usuario = $_POST["asignar-usuario"];
-        $proyecto = !empty($_POST["asignar-proyecto"]) ? $_POST["asignar-proyecto"] : NULL;
-
-        if(empty($titulo) || empty($fecha_vencimiento) || empty($prioridad) || empty($estado)){
-            die("Todos los campos son obligatorios");
-        }
-
-        if(empty($mensaje)){
-            $sql = "UPDATE tareas SET titulo = ?, nombre_asignado = ?, prioridad = ?, estado = ?, id_proyecto = ?, actualizado_en = ? WHERE id = ?";
-
-            $stmt = $conexion->prepare($sql);
-            $stmt -> bind_param("ssssisi", $titulo, $usuario, $prioridad, $estado, $proyecto, $fecha_actual, $id_tarea);
-            if ($stmt -> execute()){
-                header("location: ../frontend/interfaz.php");
-                exit();
-            }else{
-                echo "error";
-            }
-        }
-
-        echo $mensaje;
-
+    // Manejar la etiqueta
+    if (isset($_POST['etiquetas']) && !empty($_POST['etiquetas'])) {
+        $id_etiqueta = $_POST['etiquetas'];
+        $sql_et = "SELECT nombre FROM etiquetas WHERE id = ?";
+        $stmt_et = $conexion->prepare($sql_et);
+        $stmt_et->bind_param("i", $id_etiqueta);
+        $stmt_et->execute();
+        $res_et = $stmt_et->get_result();
+        $et = $res_et->fetch_assoc();
+        $nombre_etiqueta = $et['nombre'];
+    } else {
+        $nombre_etiqueta = null;
     }
+
+    $sql = "UPDATE tareas SET titulo=?, prioridad=?, estado=?, nombre_etiqueta=? WHERE id=?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("ssssi", $titulo, $prioridad, $estado, $nombre_etiqueta, $id_tarea);
+
+    if ($stmt->execute()) {
+        header("Location: ../frontend/interfaz.php?success=1");
+        exit;
+    } else {
+        echo "Error al actualizar tarea";
+    }
+}
 ?>

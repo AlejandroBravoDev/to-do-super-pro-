@@ -1,23 +1,19 @@
 <?php
 require_once "../backend/conexion.php";
 
-$id_usuario = $_SESSION['id'];
-
 if(!isset($_SESSION["id"])){
     header("Location: ../index.php");
     exit();
 }
 
-$sql = "SELECT id, titulo, descripcion, usuario 
-        FROM archivadas 
-        WHERE id_creador = ? OR id_asignado = ?";
+$id_usuario = $_SESSION['id'];
 
+
+$sql = "SELECT id, titulo, descripcion, usuario, subtareas, subtareas_completadas FROM archivadas WHERE id_creador = ? OR id_asignado = ?";
 $stmt = $conexion->prepare($sql);
 $stmt->bind_param("ii", $id_usuario, $id_usuario);
 $stmt->execute();
 $result = $stmt->get_result();
-
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -40,6 +36,29 @@ $result = $stmt->get_result();
                     <h3><?php echo htmlspecialchars($tarea['titulo']); ?></h3>
                     <p>Descripcion: <?php echo htmlspecialchars($tarea['descripcion']); ?></p>
                     <p>Creada por: <strong><?php echo htmlspecialchars($tarea['usuario']); ?></strong></p>
+                    
+
+                    <!-- Mostrar subtareas -->
+                    <b>Subtareas completadas</b>
+                    <?php
+                    $subtareas = !empty($tarea["subtareas"]) ? array_map("trim", explode(",", $tarea["subtareas"])) : [];
+                    $completadas = !empty($tarea["subtareas_completadas"]) ? array_map("trim", explode(",", $tarea["subtareas_completadas"])) : [];
+
+                    if (!empty($subtareas)) {
+                        echo "<ul>";
+                        foreach ($subtareas as $sub) {
+                            $sub = htmlspecialchars($sub);
+                            if (in_array($sub, $completadas)) {
+                                echo "<li><i class='fa-solid fa-circle-check'></i> $sub (Completada)</li>";
+                            } else {
+                                echo "<li>$sub</li>";
+                            }
+                        }
+                        echo "</ul>";
+                    } else {
+                        echo "<p><i>No había subtareas en esta tarea.</i></p>";
+                    }
+                    ?>
                     <b>Tarea completada</b>
                     <form method="post" action="../backend/action-eliminar-archivada.php" style="margin:0;">
                         <input type="hidden" name="id_archivada" value="<?php echo $tarea['id']; ?>">

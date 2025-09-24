@@ -1,11 +1,10 @@
 <?php
 require_once '../backend/conexion.php';
 
-
 if (isset($_POST['id_tarea'])) {
     $id_tarea = intval($_POST['id_tarea']);
 
-    //Traigo todos los datos de la tarea que voy a archivar
+    // Traigo todos los datos de la tarea que voy a archivar
     $sqlTarea = "SELECT * FROM tareas WHERE id = ?";
     $stmt = $conexion->prepare($sqlTarea);
     $stmt->bind_param("i", $id_tarea);
@@ -15,13 +14,15 @@ if (isset($_POST['id_tarea'])) {
     $stmt->close();
 
     if ($tarea) {
-        $titulo = $tarea['titulo'];
-        $descripcion = $tarea['descripcion'];
+        $titulo            = $tarea['titulo'];
+        $descripcion       = $tarea['descripcion'];
         $fecha_vencimiento = $tarea['fecha_vencimiento'];
-        $id_creador = $tarea['id_creador'];
-        $id_asignado = $tarea['id_asignado'];
+        $id_creador        = $tarea['id_creador'];
+        $id_asignado       = $tarea['id_asignado'];
+        $subtareas         = $tarea['subtareas'] ?? null;
+        $subtareas_comp    = $tarea['subtareas_completadas'] ?? null;  
 
-        //Nombre de el usuario que creo la tarea
+        // Nombre de el usuario que creo la tarea
         $sqlUsuario = "SELECT nombre FROM usuarios WHERE id = ?";
         $stmt = $conexion->prepare($sqlUsuario);
         $stmt->bind_param("i", $id_creador);
@@ -30,24 +31,35 @@ if (isset($_POST['id_tarea'])) {
         $usuario = $resultadoUsuario->fetch_assoc();
         $stmt->close();
 
-        
         $nombreUsuario = $usuario['nombre'];
 
-        //Se inserta la tarea en la tabla
-        $sqlInsert = "INSERT INTO archivadas (titulo, descripcion, fecha_vencimiento, usuario, id_creador, id_asignado, fecha_archivada) 
-              VALUES (?, ?, ?, ?, ?, ?, NOW())";
+        // Se inserta la tarea en la tabla archivadas (incluyendo subtareas)
+        $sqlInsert = "INSERT INTO archivadas 
+            (titulo, descripcion, fecha_vencimiento, usuario, id_creador, id_asignado, fecha_archivada, subtareas, subtareas_completadas) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
 
         $stmtI = $conexion->prepare($sqlInsert);
-        $stmtI->bind_param("ssssii", $titulo, $descripcion, $fecha_vencimiento, $nombreUsuario, $id_creador, $id_asignado);  
+        $stmtI->bind_param(
+        "ssssiiss", 
+        $titulo, 
+        $descripcion, 
+        $fecha_vencimiento, 
+        $nombreUsuario, 
+        $id_creador, 
+        $id_asignado,
+        $subtareas,
+        $subtareas_comp
+        );
         $stmtI->execute();
         $stmtI->close();
 
-        //Se cambia el estado de esta a terminada
+        // Se cambia el estado a terminada
         $sqlUpdate = "UPDATE tareas SET estado = 'terminada' WHERE id = ?";
         $stmtUpt = $conexion->prepare($sqlUpdate);
         $stmtUpt->bind_param("i", $id_tarea);
         $stmtUpt->execute();
         $stmtUpt->close();
+
         // Eliminar la tarea original después de archivarla
         $delete = $conexion->prepare("DELETE FROM tareas WHERE id = ?");
         $delete->bind_param("i", $id_tarea);
